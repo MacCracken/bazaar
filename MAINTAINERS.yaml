@@ -1,0 +1,18 @@
+# Bazaar Maintainers
+#
+# Trusted reviewers who can approve community recipe submissions.
+# GPG key IDs are verified against commits.
+
+maintainers:
+  - name: "AGNOS Team"
+    github: "MacCracken"
+    role: "lead"
+
+# Minimum reviews required before a recipe can be merged
+min_reviews: 1
+
+# Domains that require additional review (security-sensitive)
+restricted_domains:
+  - security
+  - networking
+  - ai

@@ -1,0 +1,46 @@
+name: Validate Recipes
+
+on:
+  pull_request:
+    paths:
+      - 'recipes/**/*.toml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate TOML syntax
+        run: |
+          for f in $(find recipes -name '*.toml' -type f); do
+            echo "Validating $f..."
+            python3 -c "import tomllib; tomllib.load(open('$f', 'rb'))" || exit 1
+          done
+          echo "All recipes valid."
+
+      - name: Check required fields
+        run: |
+          for f in $(find recipes -name '*.toml' -type f); do
+            python3 -c "
+          import tomllib, sys
+          with open('$f', 'rb') as fh:
+              data = tomllib.load(fh)
+          pkg = data.get('package', {})
+          required = ['name', 'version', 'description', 'license']
+          missing = [k for k in required if k not in pkg]
+          if missing:
+              print(f'$f: missing fields: {missing}')
+              sys.exit(1)
+          " || exit 1
+          done
+          echo "All required fields present."
+
+      - name: Check GPG signature on commits
+        run: |
+          # Verify the PR commits are signed
+          for sha in $(git log --format=%H origin/main..HEAD); do
+            if ! git verify-commit "$sha" 2>/dev/null; then
+              echo "WARNING: Commit $sha is not GPG-signed (recommended but not blocking)"
+            fi
+          done
