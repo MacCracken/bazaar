@@ -1,0 +1,37 @@
+# LM Studio — desktop app for discovering, downloading, and running local LLMs
+# Hoosh can use LM Studio as a provider backend.
+# Note: proprietary binary, downloaded from official release.
+
+[package]
+name = "lmstudio"
+version = "0.3.16"
+description = "LM Studio — discover, download, and run local LLMs with a desktop UI"
+license = "Proprietary"
+groups = ["ai", "llm", "desktop"]
+
+[source]
+url = "https://releases.lmstudio.ai/linux/x86_64/0.3.16/LM-Studio-0.3.16-x86_64.AppImage"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "fuse"]
+build = []
+
+[build]
+configure = ""
+make = ""
+check = ""
+install = """
+mkdir -p $PKG/usr/bin $PKG/usr/share/applications
+cp LM-Studio-*.AppImage $PKG/usr/bin/lmstudio
+chmod +x $PKG/usr/bin/lmstudio
+cat > $PKG/usr/share/applications/lmstudio.desktop << 'EOF'
+[Desktop Entry]
+Name=LM Studio
+Comment=Run local LLMs
+Exec=lmstudio
+Terminal=false
+Type=Application
+Categories=Development;Science;
+EOF
+"""

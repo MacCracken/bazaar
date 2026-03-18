@@ -1,0 +1,22 @@
+# tmux — terminal multiplexer
+
+[package]
+name = "tmux"
+version = "3.5a"
+description = "tmux — terminal multiplexer for managing multiple sessions"
+license = "ISC"
+groups = ["tools"]
+
+[source]
+url = "https://github.com/tmux/tmux/releases/download/3.5a/tmux-3.5a.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "libevent", "ncurses"]
+build = ["gcc", "make", "libevent-dev", "ncurses-dev"]
+
+[build]
+configure = "./configure --prefix=/usr"
+make = "make -j$(nproc)"
+check = ""
+install = "make DESTDIR=$PKG install"

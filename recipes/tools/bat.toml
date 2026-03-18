@@ -1,0 +1,25 @@
+# bat — cat clone with syntax highlighting and git integration
+
+[package]
+name = "bat"
+version = "0.25.0"
+description = "bat — cat with wings (syntax highlighting, git integration)"
+license = "MIT"
+groups = ["tools"]
+
+[source]
+url = "https://github.com/sharkdp/bat/archive/refs/tags/v0.25.0.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc"]
+build = ["rust"]
+
+[build]
+configure = ""
+make = "cargo build --release"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+cp target/release/bat $PKG/usr/bin/
+"""

@@ -1,0 +1,25 @@
+# lazygit — terminal UI for git
+
+[package]
+name = "lazygit"
+version = "0.50.0"
+description = "lazygit — simple terminal UI for git commands"
+license = "MIT"
+groups = ["tools", "git"]
+
+[source]
+url = "https://github.com/jesseduffield/lazygit/archive/refs/tags/v0.50.0.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "git"]
+build = ["go"]
+
+[build]
+configure = ""
+make = "go build -o lazygit -ldflags='-s -w'"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+cp lazygit $PKG/usr/bin/
+"""

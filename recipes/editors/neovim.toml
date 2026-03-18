@@ -1,0 +1,23 @@
+# Neovim — hyperextensible Vim-based text editor
+# AGNOS ships helix as the default editor; neovim is a community alternative.
+
+[package]
+name = "neovim"
+version = "0.11.1"
+description = "Neovim — hyperextensible Vim-based text editor"
+license = "Apache-2.0"
+groups = ["editors"]
+
+[source]
+url = "https://github.com/neovim/neovim/archive/refs/tags/v0.11.1.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "libluajit", "libuv", "msgpack-c", "tree-sitter", "unibilium"]
+build = ["cmake", "make", "gcc", "gettext"]
+
+[build]
+configure = "cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr"
+make = "cmake --build build -j$(nproc)"
+check = ""
+install = "DESTDIR=$PKG cmake --install build"

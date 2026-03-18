@@ -1,0 +1,22 @@
+# hyprcursor — Hyprland cursor theme library
+
+[package]
+name = "hyprcursor"
+version = "0.1.12"
+description = "hyprcursor — cursor theme library for Hyprland"
+license = "BSD-3-Clause"
+groups = ["desktops", "wayland", "libraries"]
+
+[source]
+url = "https://github.com/hyprwm/hyprcursor/archive/refs/tags/v0.1.12.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "cairo", "hyprlang", "librsvg", "libzip", "tomlplusplus"]
+build = ["cmake", "ninja", "gcc"]
+
+[build]
+configure = "cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr"
+make = "cmake --build build -j$(nproc)"
+check = ""
+install = "DESTDIR=$PKG cmake --install build"

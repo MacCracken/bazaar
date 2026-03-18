@@ -1,0 +1,31 @@
+# ONNX Runtime — cross-platform ML inference engine
+# Used by phylax (ML binary classifier), rasa (image ops), and other AI features.
+
+[package]
+name = "onnxruntime"
+version = "1.22.0"
+description = "ONNX Runtime — high-performance ML inference and training engine"
+license = "MIT"
+groups = ["ai", "ml", "libraries"]
+
+[source]
+url = "https://github.com/microsoft/onnxruntime/archive/refs/tags/v1.22.0.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "protobuf"]
+build = ["cmake", "gcc", "python3"]
+
+[build]
+configure = """
+./build.sh --config Release --build_shared_lib --parallel \
+    --cmake_extra_defines CMAKE_INSTALL_PREFIX=/usr \
+    --skip_tests
+"""
+make = ""
+check = ""
+install = """
+mkdir -p $PKG/usr/lib $PKG/usr/include
+cp build/Linux/Release/libonnxruntime.so* $PKG/usr/lib/
+cp -r include/onnxruntime $PKG/usr/include/
+"""

@@ -1,0 +1,22 @@
+# wl-clipboard — Wayland clipboard utilities (wl-copy, wl-paste)
+
+[package]
+name = "wl-clipboard"
+version = "2.2.1"
+description = "wl-clipboard — command-line Wayland clipboard utilities"
+license = "GPL-3.0"
+groups = ["desktops", "wayland"]
+
+[source]
+url = "https://github.com/bugaevc/wl-clipboard/archive/refs/tags/v2.2.1.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "wayland"]
+build = ["meson", "ninja", "wayland-dev"]
+
+[build]
+configure = "meson setup build --prefix=/usr -Dbuildtype=release"
+make = "ninja -C build"
+check = ""
+install = "DESTDIR=$PKG ninja -C build install"

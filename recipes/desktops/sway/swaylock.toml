@@ -1,0 +1,22 @@
+# swaylock-effects — screen locker for sway (with blur, clock, effects)
+
+[package]
+name = "swaylock-effects"
+version = "1.7.0.0"
+description = "swaylock-effects — screen locker for sway with blur and visual effects"
+license = "MIT"
+groups = ["desktops", "wayland"]
+
+[source]
+url = "https://github.com/jirutka/swaylock-effects/archive/refs/tags/v1.7.0.0.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "wayland", "cairo", "gdk-pixbuf", "pam"]
+build = ["meson", "ninja", "wayland-dev", "scdoc"]
+
+[build]
+configure = "meson setup build --prefix=/usr -Dbuildtype=release"
+make = "ninja -C build"
+check = ""
+install = "DESTDIR=$PKG ninja -C build install"

@@ -1,0 +1,35 @@
+# swaybar — status bar for sway (ships with sway, but can be replaced)
+# Note: swaybar is built as part of sway. This recipe is for waybar,
+# the more popular standalone status bar used with sway.
+
+[package]
+name = "waybar"
+version = "0.11.0"
+description = "Waybar — highly customizable Wayland bar for sway and other compositors"
+license = "MIT"
+groups = ["desktops", "wayland"]
+
+[source]
+url = "https://github.com/Alexays/Waybar/archive/refs/tags/0.11.0.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = [
+    "glibc",
+    "wayland",
+    "gtk4",
+    "gtk-layer-shell",
+    "json-c",
+    "pulseaudio",
+    "libinput",
+    "libevdev",
+    "spdlog",
+    "fmt",
+]
+build = ["meson", "ninja", "wayland-dev", "scdoc"]
+
+[build]
+configure = "meson setup build --prefix=/usr -Dbuildtype=release"
+make = "ninja -C build"
+check = ""
+install = "DESTDIR=$PKG ninja -C build install"

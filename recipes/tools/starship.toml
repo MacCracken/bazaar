@@ -1,0 +1,25 @@
+# starship — cross-shell prompt
+
+[package]
+name = "starship"
+version = "1.23.0"
+description = "Starship — minimal, blazing-fast cross-shell prompt"
+license = "ISC"
+groups = ["tools", "shell"]
+
+[source]
+url = "https://github.com/starship/starship/archive/refs/tags/v1.23.0.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc"]
+build = ["rust"]
+
+[build]
+configure = ""
+make = "cargo build --release"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+cp target/release/starship $PKG/usr/bin/
+"""

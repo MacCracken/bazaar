@@ -1,0 +1,22 @@
+# htop — interactive process viewer
+
+[package]
+name = "htop"
+version = "3.3.0"
+description = "htop — interactive process viewer for Unix systems"
+license = "GPL-2.0"
+groups = ["tools", "monitoring"]
+
+[source]
+url = "https://github.com/htop-dev/htop/releases/download/3.3.0/htop-3.3.0.tar.xz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "ncurses"]
+build = ["gcc", "make", "ncurses-dev"]
+
+[build]
+configure = "./configure --prefix=/usr"
+make = "make -j$(nproc)"
+check = ""
+install = "make DESTDIR=$PKG install"

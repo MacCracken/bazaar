@@ -1,0 +1,25 @@
+# stable-diffusion.cpp — image generation in C/C++ (Stable Diffusion, SDXL, Flux)
+
+[package]
+name = "stable-diffusion-cpp"
+version = "0.2.0"
+description = "stable-diffusion.cpp — local image generation (SD 1.5, SDXL, Flux) in C/C++"
+license = "MIT"
+groups = ["ai", "image-generation"]
+
+[source]
+url = "https://github.com/leejet/stable-diffusion.cpp/archive/refs/tags/v0.2.0.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc"]
+build = ["cmake", "gcc", "make"]
+
+[build]
+configure = "cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DSD_BUILD_EXAMPLES=ON"
+make = "cmake --build build -j$(nproc)"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+cp build/bin/sd $PKG/usr/bin/stable-diffusion-cpp
+"""

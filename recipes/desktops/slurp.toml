@@ -1,0 +1,22 @@
+# slurp — Wayland region selector (used with grim for area screenshots)
+
+[package]
+name = "slurp"
+version = "1.5.0"
+description = "slurp — select a region in a Wayland compositor"
+license = "MIT"
+groups = ["desktops", "wayland"]
+
+[source]
+url = "https://github.com/emersion/slurp/releases/download/v1.5.0/slurp-1.5.0.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "wayland", "cairo", "libxkbcommon"]
+build = ["meson", "ninja", "wayland-dev", "scdoc"]
+
+[build]
+configure = "meson setup build --prefix=/usr -Dbuildtype=release"
+make = "ninja -C build"
+check = ""
+install = "DESTDIR=$PKG ninja -C build install"

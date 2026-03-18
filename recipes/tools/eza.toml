@@ -1,0 +1,25 @@
+# eza — modern replacement for ls (formerly exa)
+
+[package]
+name = "eza"
+version = "0.20.22"
+description = "eza — modern, maintained replacement for ls"
+license = "MIT"
+groups = ["tools"]
+
+[source]
+url = "https://github.com/eza-community/eza/archive/refs/tags/v0.20.22.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc"]
+build = ["rust"]
+
+[build]
+configure = ""
+make = "cargo build --release"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+cp target/release/eza $PKG/usr/bin/
+"""

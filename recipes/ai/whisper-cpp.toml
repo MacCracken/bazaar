@@ -1,0 +1,27 @@
+# whisper.cpp — speech-to-text inference (OpenAI Whisper in C/C++)
+# Local STT for vansh (voice shell) or any audio transcription pipeline.
+
+[package]
+name = "whisper-cpp"
+version = "1.7.5"
+description = "whisper.cpp — OpenAI Whisper speech-to-text in C/C++ (CPU + GPU)"
+license = "MIT"
+groups = ["ai", "speech"]
+
+[source]
+url = "https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.7.5.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc"]
+build = ["cmake", "gcc", "make"]
+
+[build]
+configure = "cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr"
+make = "cmake --build build -j$(nproc)"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin $PKG/usr/lib
+cp build/bin/whisper-* $PKG/usr/bin/
+cp build/src/libwhisper.so $PKG/usr/lib/ 2>/dev/null || true
+"""

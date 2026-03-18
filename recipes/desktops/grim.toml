@@ -1,0 +1,23 @@
+# grim — Wayland screenshot tool (works with sway + hyprland)
+# AGNOS ships selah as the AI screenshot tool; grim is the lightweight alternative.
+
+[package]
+name = "grim"
+version = "1.4.1"
+description = "grim — grab images from a Wayland compositor"
+license = "MIT"
+groups = ["desktops", "wayland"]
+
+[source]
+url = "https://git.sr.ht/~emersion/grim/refs/download/v1.4.1/grim-1.4.1.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "wayland", "cairo", "libjpeg-turbo", "libpng"]
+build = ["meson", "ninja", "wayland-dev", "scdoc"]
+
+[build]
+configure = "meson setup build --prefix=/usr -Dbuildtype=release"
+make = "ninja -C build"
+check = ""
+install = "DESTDIR=$PKG ninja -C build install"

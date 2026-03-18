@@ -1,0 +1,23 @@
+# PyTorch — ML framework (CPU build; CUDA variant requires nvidia recipes)
+# Foundation for vLLM, ComfyUI, and many AI tools.
+
+[package]
+name = "pytorch"
+version = "2.6.0"
+description = "PyTorch — open-source machine learning framework"
+license = "BSD-3-Clause"
+groups = ["ai", "ml", "libraries"]
+
+[source]
+url = "https://github.com/pytorch/pytorch/releases/download/v2.6.0/pytorch-v2.6.0.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["python3", "glibc", "openblas"]
+build = ["python3", "pip", "cmake", "gcc", "openblas-dev"]
+
+[build]
+configure = ""
+make = "USE_CUDA=0 USE_DISTRIBUTED=0 python3 setup.py bdist_wheel"
+check = ""
+install = "pip install --root=$PKG --prefix=/usr dist/*.whl"

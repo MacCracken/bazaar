@@ -1,0 +1,25 @@
+# dust — intuitive disk usage tool (du + rust)
+
+[package]
+name = "dust"
+version = "1.1.2"
+description = "dust — more intuitive version of du, written in Rust"
+license = "Apache-2.0"
+groups = ["tools"]
+
+[source]
+url = "https://github.com/bootandy/dust/archive/refs/tags/v1.1.2.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc"]
+build = ["rust"]
+
+[build]
+configure = ""
+make = "cargo build --release"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+cp target/release/dust $PKG/usr/bin/
+"""

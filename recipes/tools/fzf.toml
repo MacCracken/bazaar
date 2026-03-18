@@ -1,0 +1,25 @@
+# fzf — command-line fuzzy finder
+
+[package]
+name = "fzf"
+version = "0.61.1"
+description = "fzf — general-purpose command-line fuzzy finder"
+license = "MIT"
+groups = ["tools", "search"]
+
+[source]
+url = "https://github.com/junegunn/fzf/archive/refs/tags/v0.61.1.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc"]
+build = ["go"]
+
+[build]
+configure = ""
+make = "make"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+cp bin/fzf $PKG/usr/bin/
+"""

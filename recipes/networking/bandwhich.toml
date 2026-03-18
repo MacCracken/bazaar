@@ -1,0 +1,25 @@
+# bandwhich — terminal bandwidth utilization tool
+
+[package]
+name = "bandwhich"
+version = "0.22.2"
+description = "bandwhich — terminal bandwidth utilization tool per process/connection"
+license = "MIT"
+groups = ["networking", "monitoring"]
+
+[source]
+url = "https://github.com/imsnif/bandwhich/archive/refs/tags/v0.22.2.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc"]
+build = ["rust"]
+
+[build]
+configure = ""
+make = "cargo build --release"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+cp target/release/bandwhich $PKG/usr/bin/
+"""

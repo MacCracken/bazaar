@@ -1,0 +1,26 @@
+# fabric — AI augmentation framework (Daniel Miessler)
+# CLI tool for applying AI patterns to everyday tasks.
+
+[package]
+name = "fabric"
+version = "1.4.186"
+description = "fabric — open-source AI augmentation framework for applying patterns"
+license = "MIT"
+groups = ["ai", "tools"]
+
+[source]
+url = "https://github.com/danielmiessler/fabric/archive/refs/tags/v1.4.186.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc"]
+build = ["go"]
+
+[build]
+configure = ""
+make = "go build -o fabric -ldflags='-s -w' ."
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+cp fabric $PKG/usr/bin/
+"""

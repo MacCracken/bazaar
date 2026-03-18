@@ -1,0 +1,33 @@
+# wlroots — modular Wayland compositor library (required by sway)
+
+[package]
+name = "wlroots"
+version = "0.18.2"
+description = "wlroots — modular Wayland compositor library"
+license = "MIT"
+groups = ["desktops", "wayland", "libraries"]
+
+[source]
+url = "https://gitlab.freedesktop.org/wlroots/wlroots/-/releases/0.18.2/downloads/wlroots-0.18.2.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = [
+    "glibc",
+    "wayland",
+    "libdrm",
+    "mesa",
+    "libinput",
+    "pixman",
+    "seatd",
+    "vulkan-loader",
+    "libxkbcommon",
+    "xcb-util-wm",
+]
+build = ["meson", "ninja", "wayland-dev", "hwdata"]
+
+[build]
+configure = "meson setup build --prefix=/usr -Dbuildtype=release -Dexamples=false"
+make = "ninja -C build"
+check = ""
+install = "DESTDIR=$PKG ninja -C build install"

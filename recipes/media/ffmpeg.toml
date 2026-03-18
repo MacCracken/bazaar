@@ -1,0 +1,30 @@
+# ffmpeg — complete multimedia framework
+# Note: AGNOS ships tarang as the native media pipeline, but ffmpeg is
+# available via bazaar for compatibility with tools that depend on it.
+
+[package]
+name = "ffmpeg"
+version = "7.1.1"
+description = "FFmpeg — complete multimedia framework (encode, decode, transcode, mux, demux, stream)"
+license = "LGPL-2.1"
+groups = ["media"]
+
+[source]
+url = "https://ffmpeg.org/releases/ffmpeg-7.1.1.tar.xz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "libx264", "libx265", "libvpx", "opus", "lame", "libass", "freetype", "fribidi", "zlib"]
+build = ["gcc", "make", "nasm", "pkg-config"]
+
+[build]
+configure = """
+./configure --prefix=/usr --enable-gpl --enable-nonfree \
+    --enable-libx264 --enable-libx265 --enable-libvpx \
+    --enable-libopus --enable-libmp3lame --enable-libass \
+    --enable-libfreetype --enable-libfribidi \
+    --disable-debug --disable-doc --disable-static --enable-shared
+"""
+make = "make -j$(nproc)"
+check = ""
+install = "make DESTDIR=$PKG install"

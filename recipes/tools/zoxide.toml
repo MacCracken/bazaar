@@ -1,0 +1,25 @@
+# zoxide — smarter cd command (tracks frequently used directories)
+
+[package]
+name = "zoxide"
+version = "0.9.8"
+description = "zoxide — smarter cd command that learns your habits"
+license = "MIT"
+groups = ["tools"]
+
+[source]
+url = "https://github.com/ajeetdsouza/zoxide/archive/refs/tags/v0.9.8.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc"]
+build = ["rust"]
+
+[build]
+configure = ""
+make = "cargo build --release"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+cp target/release/zoxide $PKG/usr/bin/
+"""

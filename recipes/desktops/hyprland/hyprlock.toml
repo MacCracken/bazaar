@@ -1,0 +1,22 @@
+# hyprlock — screen locker for Hyprland (GPU-accelerated, configurable)
+
+[package]
+name = "hyprlock"
+version = "0.7.1"
+description = "hyprlock — GPU-accelerated screen locker for Hyprland"
+license = "BSD-3-Clause"
+groups = ["desktops", "wayland"]
+
+[source]
+url = "https://github.com/hyprwm/hyprlock/archive/refs/tags/v0.7.1.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "wayland", "mesa", "cairo", "pango", "pam", "hyprlang", "hyprutils", "sdbus-cpp"]
+build = ["cmake", "ninja", "wayland-dev"]
+
+[build]
+configure = "cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr"
+make = "cmake --build build -j$(nproc)"
+check = ""
+install = "DESTDIR=$PKG cmake --install build"

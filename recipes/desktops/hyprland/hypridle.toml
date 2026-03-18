@@ -1,0 +1,22 @@
+# hypridle — idle daemon for Hyprland (triggers lock, screen off, suspend)
+
+[package]
+name = "hypridle"
+version = "0.1.6"
+description = "hypridle — idle daemon for Hyprland"
+license = "BSD-3-Clause"
+groups = ["desktops", "wayland"]
+
+[source]
+url = "https://github.com/hyprwm/hypridle/archive/refs/tags/v0.1.6.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "wayland", "hyprlang", "hyprutils", "sdbus-cpp"]
+build = ["cmake", "ninja", "wayland-dev"]
+
+[build]
+configure = "cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr"
+make = "cmake --build build -j$(nproc)"
+check = ""
+install = "DESTDIR=$PKG cmake --install build"

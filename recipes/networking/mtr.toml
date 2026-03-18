@@ -1,0 +1,22 @@
+# mtr — network diagnostic tool (traceroute + ping)
+
+[package]
+name = "mtr"
+version = "0.95"
+description = "mtr — network diagnostic tool combining traceroute and ping"
+license = "GPL-2.0"
+groups = ["networking", "diagnostics"]
+
+[source]
+url = "https://github.com/traviscross/mtr/archive/refs/tags/v0.95.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "ncurses"]
+build = ["gcc", "make", "autoconf", "automake", "ncurses-dev"]
+
+[build]
+configure = "./bootstrap.sh && ./configure --prefix=/usr --without-gtk"
+make = "make -j$(nproc)"
+check = ""
+install = "make DESTDIR=$PKG install"

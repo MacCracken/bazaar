@@ -1,0 +1,31 @@
+# ComfyUI — node-based image generation workflow (Stable Diffusion, Flux)
+
+[package]
+name = "comfyui"
+version = "0.3.30"
+description = "ComfyUI — node-based image/video generation workflow engine"
+license = "GPL-3.0"
+groups = ["ai", "image-generation", "web"]
+
+[source]
+url = "https://github.com/comfyanonymous/ComfyUI/archive/refs/tags/v0.3.30.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["python3", "pytorch"]
+build = ["python3", "pip"]
+
+[build]
+configure = ""
+make = "pip wheel --no-deps ."
+check = ""
+install = """
+mkdir -p $PKG/usr/lib/comfyui
+cp -r . $PKG/usr/lib/comfyui/
+mkdir -p $PKG/usr/bin
+cat > $PKG/usr/bin/comfyui << 'LAUNCHER'
+#!/bin/sh
+exec python3 /usr/lib/comfyui/main.py "$@"
+LAUNCHER
+chmod +x $PKG/usr/bin/comfyui
+"""

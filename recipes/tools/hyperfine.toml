@@ -1,0 +1,25 @@
+# hyperfine — command-line benchmarking tool
+
+[package]
+name = "hyperfine"
+version = "1.19.0"
+description = "hyperfine — command-line benchmarking tool"
+license = "MIT"
+groups = ["tools", "benchmarking"]
+
+[source]
+url = "https://github.com/sharkdp/hyperfine/archive/refs/tags/v1.19.0.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc"]
+build = ["rust"]
+
+[build]
+configure = ""
+make = "cargo build --release"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+cp target/release/hyperfine $PKG/usr/bin/
+"""

@@ -1,0 +1,22 @@
+# jq — command-line JSON processor
+
+[package]
+name = "jq"
+version = "1.7.1"
+description = "jq — lightweight command-line JSON processor"
+license = "MIT"
+groups = ["tools"]
+
+[source]
+url = "https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-1.7.1.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "oniguruma"]
+build = ["gcc", "make", "autoconf", "automake", "libtool"]
+
+[build]
+configure = "./configure --prefix=/usr --disable-static"
+make = "make -j$(nproc)"
+check = ""
+install = "make DESTDIR=$PKG install"

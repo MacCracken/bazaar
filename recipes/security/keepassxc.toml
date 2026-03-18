@@ -1,0 +1,22 @@
+# KeePassXC — cross-platform password manager
+
+[package]
+name = "keepassxc"
+version = "2.7.9"
+description = "KeePassXC — cross-platform password manager"
+license = "GPL-3.0"
+groups = ["security", "desktop"]
+
+[source]
+url = "https://github.com/keepassxreboot/keepassxc/releases/download/2.7.9/keepassxc-2.7.9-src.tar.xz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "qt6-base", "libsodium", "libargon2", "zlib", "minizip"]
+build = ["cmake", "gcc", "qt6-base-dev", "libsodium-dev"]
+
+[build]
+configure = "cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_XC_BROWSER=ON -DWITH_XC_SSHAGENT=ON"
+make = "cmake --build build -j$(nproc)"
+check = ""
+install = "DESTDIR=$PKG cmake --install build"

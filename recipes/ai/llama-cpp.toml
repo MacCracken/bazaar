@@ -1,0 +1,27 @@
+# llama.cpp — fast LLM inference in C/C++ with GPU support
+# Hoosh can use llama.cpp as a backend provider for local inference.
+
+[package]
+name = "llama-cpp"
+version = "b5170"
+description = "llama.cpp — LLM inference in C/C++ (CPU + CUDA/ROCm/Metal GPU)"
+license = "MIT"
+groups = ["ai", "llm"]
+
+[source]
+url = "https://github.com/ggml-org/llama.cpp/archive/refs/tags/b5170.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc"]
+build = ["cmake", "gcc", "make"]
+
+[build]
+configure = "cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DGGML_NATIVE=ON"
+make = "cmake --build build -j$(nproc)"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+cp build/bin/llama-* $PKG/usr/bin/
+cp build/bin/ggml-* $PKG/usr/bin/ 2>/dev/null || true
+"""

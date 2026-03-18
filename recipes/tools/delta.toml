@@ -1,0 +1,26 @@
+# delta — syntax-highlighting pager for git diffs
+# Note: not to be confused with AGNOS Delta (code hosting platform).
+
+[package]
+name = "git-delta"
+version = "0.18.2"
+description = "delta — syntax-highlighting pager for git, diff, and grep output"
+license = "MIT"
+groups = ["tools", "git"]
+
+[source]
+url = "https://github.com/dandavison/delta/archive/refs/tags/0.18.2.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "git"]
+build = ["rust"]
+
+[build]
+configure = ""
+make = "cargo build --release"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+cp target/release/delta $PKG/usr/bin/
+"""

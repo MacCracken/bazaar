@@ -1,0 +1,25 @@
+# yt-dlp — video downloader (youtube-dl fork)
+
+[package]
+name = "yt-dlp"
+version = "2025.03.31"
+description = "yt-dlp — feature-rich command-line video downloader"
+license = "Unlicense"
+groups = ["media", "tools"]
+
+[source]
+url = "https://github.com/yt-dlp/yt-dlp/archive/refs/tags/2025.03.31.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["python3", "ffmpeg"]
+build = ["python3", "pip"]
+
+[build]
+configure = ""
+make = "python3 -m build --wheel --no-isolation"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+pip install --root=$PKG --prefix=/usr dist/*.whl
+"""

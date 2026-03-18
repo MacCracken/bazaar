@@ -1,0 +1,26 @@
+# Open WebUI — self-hosted web interface for LLMs (ChatGPT-style)
+# Connects to hoosh/ollama for local models, or cloud APIs.
+
+[package]
+name = "open-webui"
+version = "0.6.10"
+description = "Open WebUI — self-hosted ChatGPT-style interface for local and cloud LLMs"
+license = "MIT"
+groups = ["ai", "llm", "web"]
+
+[source]
+url = "https://github.com/open-webui/open-webui/archive/refs/tags/v0.6.10.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["python3", "nodejs"]
+build = ["python3", "pip", "nodejs", "npm"]
+
+[build]
+configure = ""
+make = """
+cd frontend && npm ci && npm run build && cd ..
+pip wheel --no-deps .
+"""
+check = ""
+install = "pip install --root=$PKG --prefix=/usr dist/*.whl"

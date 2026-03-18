@@ -1,0 +1,27 @@
+# ollama — run LLMs locally
+# Note: AGNOS ships hoosh as the LLM gateway which can use Ollama as a backend.
+# This recipe installs the Ollama server/CLI for direct local model management.
+
+[package]
+name = "ollama"
+version = "0.6.2"
+description = "Ollama — run large language models locally"
+license = "MIT"
+groups = ["ai", "llm"]
+
+[source]
+url = "https://github.com/ollama/ollama/archive/refs/tags/v0.6.2.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc"]
+build = ["go", "cmake", "gcc"]
+
+[build]
+configure = ""
+make = "go generate ./... && go build -o ollama ."
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+cp ollama $PKG/usr/bin/
+"""

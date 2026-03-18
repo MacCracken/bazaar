@@ -1,0 +1,23 @@
+# wofi — Wayland-native app launcher/dmenu (works with sway + hyprland)
+# AGNOS ships fuzzel as default; wofi is an alternative for users who prefer it.
+
+[package]
+name = "wofi"
+version = "1.4.1"
+description = "wofi — Wayland-native application launcher (rofi/dmenu alternative)"
+license = "GPL-3.0"
+groups = ["desktops", "wayland"]
+
+[source]
+url = "https://hg.sr.ht/~scoopta/wofi/archive/v1.4.1.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "wayland", "gtk3"]
+build = ["meson", "ninja", "wayland-dev"]
+
+[build]
+configure = "meson setup build --prefix=/usr -Dbuildtype=release"
+make = "ninja -C build"
+check = ""
+install = "DESTDIR=$PKG ninja -C build install"

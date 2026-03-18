@@ -1,0 +1,25 @@
+# micro — modern terminal-based text editor (intuitive keybindings)
+
+[package]
+name = "micro"
+version = "2.0.14"
+description = "Micro — modern terminal text editor with intuitive keybindings"
+license = "MIT"
+groups = ["editors"]
+
+[source]
+url = "https://github.com/zyedidia/micro/archive/refs/tags/v2.0.14.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc"]
+build = ["go"]
+
+[build]
+configure = ""
+make = "make build"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+cp micro $PKG/usr/bin/
+"""

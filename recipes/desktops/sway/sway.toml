@@ -1,0 +1,38 @@
+# sway — i3-compatible Wayland compositor
+# Drop-in alternative to aethersafha. Uses the same base graphics stack
+# (Mesa, Wayland, PipeWire, libinput) that AGNOS already provides.
+#
+# To use: `ark bazaar install sway swaybg swaylock swaybar`
+# Then select "sway" at the session chooser or set in argonaut config.
+
+[package]
+name = "sway"
+version = "1.10.1"
+description = "Sway — i3-compatible tiling Wayland compositor"
+license = "MIT"
+groups = ["desktops", "wayland"]
+
+[source]
+url = "https://github.com/swaywm/sway/releases/download/1.10.1/sway-1.10.1.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = [
+    "glibc",
+    "wayland",
+    "wlroots",
+    "libinput",
+    "cairo",
+    "pango",
+    "gdk-pixbuf",
+    "json-c",
+    "pcre2",
+    "seatd",
+]
+build = ["meson", "ninja", "wayland-dev", "wlroots-dev", "scdoc"]
+
+[build]
+configure = "meson setup build --prefix=/usr -Dbuildtype=release"
+make = "ninja -C build"
+check = ""
+install = "DESTDIR=$PKG ninja -C build install"

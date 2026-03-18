@@ -1,0 +1,25 @@
+# tokei — count lines of code quickly
+
+[package]
+name = "tokei"
+version = "13.0.0-alpha.8"
+description = "tokei — count lines of code quickly"
+license = "MIT"
+groups = ["tools", "development"]
+
+[source]
+url = "https://github.com/XAMPPRocky/tokei/archive/refs/tags/v13.0.0-alpha.8.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc"]
+build = ["rust"]
+
+[build]
+configure = ""
+make = "cargo build --release"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+cp target/release/tokei $PKG/usr/bin/
+"""

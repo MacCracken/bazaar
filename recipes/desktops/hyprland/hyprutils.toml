@@ -1,0 +1,22 @@
+# hyprutils — shared utility library for Hyprland ecosystem
+
+[package]
+name = "hyprutils"
+version = "0.7.0"
+description = "hyprutils — shared utility library for the Hyprland ecosystem"
+license = "BSD-3-Clause"
+groups = ["desktops", "wayland", "libraries"]
+
+[source]
+url = "https://github.com/hyprwm/hyprutils/archive/refs/tags/v0.7.0.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "pixman"]
+build = ["cmake", "ninja", "gcc"]
+
+[build]
+configure = "cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr"
+make = "cmake --build build -j$(nproc)"
+check = ""
+install = "DESTDIR=$PKG cmake --install build"

@@ -1,0 +1,23 @@
+# vLLM — high-throughput LLM serving engine (PagedAttention)
+# Alternative to ollama for production serving with continuous batching.
+
+[package]
+name = "vllm"
+version = "0.8.5"
+description = "vLLM — high-throughput LLM serving with PagedAttention"
+license = "Apache-2.0"
+groups = ["ai", "llm", "serving"]
+
+[source]
+url = "https://github.com/vllm-project/vllm/archive/refs/tags/v0.8.5.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["python3", "pytorch", "glibc"]
+build = ["python3", "pip", "cmake", "gcc"]
+
+[build]
+configure = ""
+make = "pip wheel --no-deps ."
+check = ""
+install = "pip install --root=$PKG --prefix=/usr dist/*.whl"

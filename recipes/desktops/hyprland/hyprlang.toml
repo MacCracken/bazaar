@@ -1,0 +1,22 @@
+# hyprlang — Hyprland config language parser library
+
+[package]
+name = "hyprlang"
+version = "0.6.0"
+description = "hyprlang — Hyprland configuration language parser"
+license = "LGPL-3.0"
+groups = ["desktops", "wayland", "libraries"]
+
+[source]
+url = "https://github.com/hyprwm/hyprlang/archive/refs/tags/v0.6.0.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "hyprutils"]
+build = ["cmake", "ninja", "gcc"]
+
+[build]
+configure = "cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr"
+make = "cmake --build build -j$(nproc)"
+check = ""
+install = "DESTDIR=$PKG cmake --install build"

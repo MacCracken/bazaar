@@ -1,0 +1,45 @@
+# Hyprland — dynamic tiling Wayland compositor with eye candy
+# Smooth animations, rounded corners, blur, dynamic tiling.
+# Uses its own wlroots fork (aquamarine) since 0.40+.
+#
+# To use: `ark bazaar install hyprland hyprpaper hyprlock hypridle`
+# Then select "hyprland" at the session chooser or set in argonaut config.
+
+[package]
+name = "hyprland"
+version = "0.48.1"
+description = "Hyprland — dynamic tiling Wayland compositor with animations and eye candy"
+license = "BSD-3-Clause"
+groups = ["desktops", "wayland"]
+
+[source]
+url = "https://github.com/hyprwm/Hyprland/releases/download/v0.48.1/source-v0.48.1.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = [
+    "glibc",
+    "wayland",
+    "libdrm",
+    "mesa",
+    "libinput",
+    "pixman",
+    "cairo",
+    "pango",
+    "libxkbcommon",
+    "seatd",
+    "vulkan-loader",
+    "xcb-util-wm",
+    "tomlplusplus",
+    "hyprlang",
+    "hyprutils",
+    "aquamarine",
+    "hyprcursor",
+]
+build = ["cmake", "ninja", "gcc", "wayland-dev", "hyprwayland-scanner"]
+
+[build]
+configure = "cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DNO_SYSTEMD=ON"
+make = "cmake --build build -j$(nproc)"
+check = ""
+install = "DESTDIR=$PKG cmake --install build"

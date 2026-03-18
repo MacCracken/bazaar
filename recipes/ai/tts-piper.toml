@@ -1,0 +1,27 @@
+# Piper — fast local text-to-speech (for vansh voice shell)
+# Lightweight neural TTS. Runs on CPU, ~10x realtime on modest hardware.
+
+[package]
+name = "piper-tts"
+version = "2024.11.14"
+description = "Piper — fast local neural text-to-speech engine"
+license = "MIT"
+groups = ["ai", "speech", "tts"]
+
+[source]
+url = "https://github.com/rhasspy/piper/archive/refs/tags/2024.11.14.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "onnxruntime"]
+build = ["cmake", "gcc", "make"]
+
+[build]
+configure = "cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr"
+make = "cmake --build build -j$(nproc)"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin $PKG/usr/lib
+cp build/piper $PKG/usr/bin/
+cp build/libpiper*.so $PKG/usr/lib/ 2>/dev/null || true
+"""

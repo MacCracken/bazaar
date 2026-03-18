@@ -1,0 +1,22 @@
+# swaybg — wallpaper tool for sway/Wayland
+
+[package]
+name = "swaybg"
+version = "1.2.1"
+description = "swaybg — wallpaper tool for Wayland compositors"
+license = "MIT"
+groups = ["desktops", "wayland"]
+
+[source]
+url = "https://github.com/swaywm/swaybg/releases/download/v1.2.1/swaybg-1.2.1.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "wayland", "cairo", "gdk-pixbuf"]
+build = ["meson", "ninja", "wayland-dev", "scdoc"]
+
+[build]
+configure = "meson setup build --prefix=/usr -Dbuildtype=release"
+make = "ninja -C build"
+check = ""
+install = "DESTDIR=$PKG ninja -C build install"

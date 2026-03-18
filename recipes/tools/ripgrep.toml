@@ -1,0 +1,25 @@
+# ripgrep — fast recursive grep alternative
+
+[package]
+name = "ripgrep"
+version = "14.1.1"
+description = "ripgrep — fast line-oriented search tool (rg)"
+license = "MIT"
+groups = ["tools", "search"]
+
+[source]
+url = "https://github.com/BurntSushi/ripgrep/archive/refs/tags/14.1.1.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc"]
+build = ["rust"]
+
+[build]
+configure = ""
+make = "cargo build --release"
+check = "cargo test"
+install = """
+mkdir -p $PKG/usr/bin
+cp target/release/rg $PKG/usr/bin/
+"""
