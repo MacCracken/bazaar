@@ -1,0 +1,25 @@
+# bottom — cross-platform graphical process/system monitor (btm)
+
+[package]
+name = "bottom"
+version = "0.10.2"
+description = "bottom (btm) — graphical process/system monitor for the terminal"
+license = "MIT"
+groups = ["tools", "monitoring"]
+
+[source]
+url = "https://github.com/ClementTsang/bottom/archive/refs/tags/0.10.2.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc"]
+build = ["rust"]
+
+[build]
+configure = ""
+make = "cargo build --release"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+cp target/release/btm $PKG/usr/bin/
+"""

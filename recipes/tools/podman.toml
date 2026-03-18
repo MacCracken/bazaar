@@ -1,0 +1,23 @@
+# podman — daemonless container engine (rootless, Docker-compatible)
+# Better fit for AGNOS security model — no daemon, rootless by default.
+
+[package]
+name = "podman"
+version = "5.5.2"
+description = "Podman — daemonless container engine (rootless, Docker CLI compatible)"
+license = "Apache-2.0"
+groups = ["tools", "containers"]
+
+[source]
+url = "https://github.com/containers/podman/archive/refs/tags/v5.5.2.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "crun", "conmon", "slirp4netns", "fuse-overlayfs"]
+build = ["go", "make", "pkg-config"]
+
+[build]
+configure = ""
+make = "make BUILDTAGS='seccomp' PREFIX=/usr"
+check = ""
+install = "make DESTDIR=$PKG PREFIX=/usr install"

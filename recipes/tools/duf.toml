@@ -1,0 +1,25 @@
+# duf — disk usage/free utility (modern df replacement)
+
+[package]
+name = "duf"
+version = "0.8.1"
+description = "duf — disk usage/free utility with a better interface than df"
+license = "MIT"
+groups = ["tools"]
+
+[source]
+url = "https://github.com/muesli/duf/archive/refs/tags/v0.8.1.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc"]
+build = ["go"]
+
+[build]
+configure = ""
+make = "go build -o duf -ldflags='-s -w'"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+cp duf $PKG/usr/bin/
+"""

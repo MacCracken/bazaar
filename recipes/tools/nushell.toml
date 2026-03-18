@@ -1,0 +1,26 @@
+# nushell — modern shell with structured data pipelines
+# Alternative to bash/zsh. Pairs well with agnoshi for AI + structured data.
+
+[package]
+name = "nushell"
+version = "0.104.0"
+description = "Nushell — modern shell where everything is structured data"
+license = "MIT"
+groups = ["tools", "shell"]
+
+[source]
+url = "https://github.com/nushell/nushell/archive/refs/tags/0.104.0.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "openssl"]
+build = ["rust"]
+
+[build]
+configure = ""
+make = "cargo build --release"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+cp target/release/nu $PKG/usr/bin/
+"""

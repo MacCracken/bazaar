@@ -1,0 +1,22 @@
+# OBS Studio — streaming and screen recording
+
+[package]
+name = "obs-studio"
+version = "31.0.2"
+description = "OBS Studio — free and open-source streaming and recording software"
+license = "GPL-2.0"
+groups = ["media", "streaming"]
+
+[source]
+url = "https://github.com/obsproject/obs-studio/archive/refs/tags/31.0.2.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "qt6-base", "pipewire", "libx264", "mbedtls", "jansson", "curl"]
+build = ["cmake", "gcc", "qt6-base-dev", "pipewire-dev", "swig"]
+
+[build]
+configure = "cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_WAYLAND=ON -DENABLE_PIPEWIRE=ON"
+make = "cmake --build build -j$(nproc)"
+check = ""
+install = "DESTDIR=$PKG cmake --install build"

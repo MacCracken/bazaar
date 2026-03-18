@@ -1,0 +1,25 @@
+# restic — fast, encrypted, deduplicated backups
+
+[package]
+name = "restic"
+version = "0.17.3"
+description = "restic — fast, secure, efficient backup program"
+license = "BSD-2-Clause"
+groups = ["tools", "backup"]
+
+[source]
+url = "https://github.com/restic/restic/archive/refs/tags/v0.17.3.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc"]
+build = ["go"]
+
+[build]
+configure = ""
+make = "go build -o restic ./cmd/restic"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+cp restic $PKG/usr/bin/
+"""

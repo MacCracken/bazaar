@@ -1,0 +1,22 @@
+# Inkscape — vector graphics editor
+
+[package]
+name = "inkscape"
+version = "1.4.2"
+description = "Inkscape — professional vector graphics editor"
+license = "GPL-3.0"
+groups = ["tools", "graphics", "desktop"]
+
+[source]
+url = "https://inkscape.org/gallery/item/52963/inkscape-1.4.2.tar.xz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "gtk3", "libxml2", "libxslt", "cairo", "pango", "gdl", "boost", "gsl", "poppler"]
+build = ["cmake", "gcc", "python3"]
+
+[build]
+configure = "cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr"
+make = "cmake --build build -j$(nproc)"
+check = ""
+install = "DESTDIR=$PKG cmake --install build"

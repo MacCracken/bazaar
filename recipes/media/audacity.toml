@@ -1,0 +1,23 @@
+# Audacity — audio editor
+# AGNOS ships shruti as the AI-native DAW; audacity is the classic alternative.
+
+[package]
+name = "audacity"
+version = "3.7.3"
+description = "Audacity — free, open-source, cross-platform audio editor"
+license = "GPL-3.0"
+groups = ["media", "audio"]
+
+[source]
+url = "https://github.com/audacity/audacity/archive/refs/tags/Audacity-3.7.3.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "wxwidgets", "portaudio", "libsndfile", "libvorbis", "flac", "lame"]
+build = ["cmake", "gcc", "python3"]
+
+[build]
+configure = "cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr"
+make = "cmake --build build -j$(nproc)"
+check = ""
+install = "DESTDIR=$PKG cmake --install build"

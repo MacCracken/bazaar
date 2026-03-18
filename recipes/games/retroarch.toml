@@ -1,0 +1,22 @@
+# RetroArch — multi-system emulator frontend
+
+[package]
+name = "retroarch"
+version = "1.20.0"
+description = "RetroArch — multi-system emulator frontend (libretro)"
+license = "GPL-3.0"
+groups = ["games", "emulation"]
+
+[source]
+url = "https://github.com/libretro/RetroArch/archive/refs/tags/v1.20.0.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "mesa", "vulkan-loader", "libdrm", "wayland", "pipewire", "libusb"]
+build = ["gcc", "make", "pkg-config"]
+
+[build]
+configure = "./configure --prefix=/usr --enable-wayland --enable-vulkan --enable-pipewire --disable-x11"
+make = "make -j$(nproc)"
+check = ""
+install = "make DESTDIR=$PKG install"

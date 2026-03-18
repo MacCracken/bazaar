@@ -1,0 +1,28 @@
+# Docker — container runtime
+# AGNOS has native sandboxing (gVisor, Firecracker), but Docker is needed
+# for compatibility with existing container workflows.
+
+[package]
+name = "docker"
+version = "28.1.1"
+description = "Docker — container runtime and CLI"
+license = "Apache-2.0"
+groups = ["tools", "containers"]
+
+[source]
+url = "https://github.com/moby/moby/archive/refs/tags/v28.1.1.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "containerd", "iptables", "iproute2"]
+build = ["go", "make"]
+
+[build]
+configure = ""
+make = "make binary"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+cp bundles/binary-daemon/dockerd $PKG/usr/bin/
+cp bundles/binary-daemon/docker-proxy $PKG/usr/bin/
+"""

@@ -1,0 +1,26 @@
+# LibreOffice — office suite
+# Heavy package with many deps — this is why it's in bazaar, not base.
+
+[package]
+name = "libreoffice"
+version = "25.2.3"
+description = "LibreOffice — free office suite (Writer, Calc, Impress, Draw, Base)"
+license = "MPL-2.0"
+groups = ["tools", "office", "desktop"]
+
+[source]
+url = "https://download.documentfoundation.org/libreoffice/src/25.2.3/libreoffice-25.2.3.2.tar.xz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "gtk3", "cups", "libxml2", "libxslt", "nss", "icu", "hunspell", "graphite2", "harfbuzz", "poppler"]
+build = ["gcc", "make", "python3", "pkg-config", "zip", "unzip", "perl"]
+
+[build]
+configure = """
+./autogen.sh --prefix=/usr --with-system-libs --without-java \
+    --disable-debug --enable-release-build --with-parallelism=$(nproc)
+"""
+make = "make build-nocheck"
+check = ""
+install = "make DESTDIR=$PKG install"

@@ -1,0 +1,26 @@
+# syncthing — continuous file sync (peer-to-peer, no cloud)
+# Perfect fit for AGNOS privacy model — no third-party servers.
+
+[package]
+name = "syncthing"
+version = "1.29.6"
+description = "Syncthing — continuous peer-to-peer file synchronization"
+license = "MPL-2.0"
+groups = ["tools", "sync"]
+
+[source]
+url = "https://github.com/syncthing/syncthing/archive/refs/tags/v1.29.6.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc"]
+build = ["go"]
+
+[build]
+configure = ""
+make = "go run build.go -no-upgrade build"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+cp syncthing $PKG/usr/bin/
+"""

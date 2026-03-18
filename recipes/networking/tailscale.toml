@@ -1,0 +1,25 @@
+# Tailscale — zero-config VPN (WireGuard-based mesh network)
+
+[package]
+name = "tailscale"
+version = "1.82.5"
+description = "Tailscale — zero-config WireGuard-based mesh VPN"
+license = "BSD-3-Clause"
+groups = ["networking", "vpn"]
+
+[source]
+url = "https://github.com/tailscale/tailscale/archive/refs/tags/v1.82.5.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "iptables"]
+build = ["go"]
+
+[build]
+configure = ""
+make = "go build -o tailscale ./cmd/tailscale && go build -o tailscaled ./cmd/tailscaled"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+cp tailscale tailscaled $PKG/usr/bin/
+"""

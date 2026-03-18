@@ -1,0 +1,25 @@
+# k9s — Kubernetes TUI dashboard
+
+[package]
+name = "k9s"
+version = "0.40.5"
+description = "k9s — terminal UI to interact with Kubernetes clusters"
+license = "Apache-2.0"
+groups = ["tools", "kubernetes"]
+
+[source]
+url = "https://github.com/derailed/k9s/archive/refs/tags/v0.40.5.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc"]
+build = ["go"]
+
+[build]
+configure = ""
+make = "make build"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+cp execs/k9s $PKG/usr/bin/
+"""

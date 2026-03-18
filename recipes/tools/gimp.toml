@@ -1,0 +1,23 @@
+# GIMP — image editor
+# AGNOS ships rasa as the AI-native image editor; GIMP is the classic alternative.
+
+[package]
+name = "gimp"
+version = "3.0.4"
+description = "GIMP — GNU Image Manipulation Program"
+license = "GPL-3.0"
+groups = ["tools", "graphics", "desktop"]
+
+[source]
+url = "https://download.gimp.org/pub/gimp/v3.0/gimp-3.0.4.tar.xz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc", "gtk3", "gegl", "babl", "glib", "cairo", "pango", "gdk-pixbuf", "libpng", "libjpeg-turbo", "libtiff"]
+build = ["meson", "ninja", "gcc", "python3", "vala"]
+
+[build]
+configure = "meson setup build --prefix=/usr -Dbuildtype=release"
+make = "ninja -C build"
+check = ""
+install = "DESTDIR=$PKG ninja -C build install"

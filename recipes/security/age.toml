@@ -1,0 +1,25 @@
+# age — simple, modern file encryption
+
+[package]
+name = "age"
+version = "1.2.1"
+description = "age — simple, modern, and secure file encryption tool"
+license = "BSD-3-Clause"
+groups = ["security", "encryption"]
+
+[source]
+url = "https://github.com/FiloSottile/age/archive/refs/tags/v1.2.1.tar.gz"
+sha256 = ""
+
+[depends]
+runtime = ["glibc"]
+build = ["go"]
+
+[build]
+configure = ""
+make = "go build -o age ./cmd/age && go build -o age-keygen ./cmd/age-keygen"
+check = ""
+install = """
+mkdir -p $PKG/usr/bin
+cp age age-keygen $PKG/usr/bin/
+"""
