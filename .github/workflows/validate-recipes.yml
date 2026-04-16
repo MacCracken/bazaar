@@ -4,6 +4,10 @@ on:
   pull_request:
     paths:
       - 'recipes/**/*.toml'
+      - 'scripts/validate_recipes.py'
+      - '.github/workflows/validate-recipes.yml'
+  push:
+    branches: [main]
 
 jobs:
   validate:
@@ -11,36 +15,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Validate TOML syntax
-        run: |
-          for f in $(find recipes -name '*.toml' -type f); do
-            echo "Validating $f..."
-            python3 -c "import tomllib; tomllib.load(open('$f', 'rb'))" || exit 1
-          done
-          echo "All recipes valid."
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
-      - name: Check required fields
-        run: |
-          for f in $(find recipes -name '*.toml' -type f); do
-            python3 -c "
-          import tomllib, sys
-          with open('$f', 'rb') as fh:
-              data = tomllib.load(fh)
-          pkg = data.get('package', {})
-          required = ['name', 'version', 'description', 'license']
-          missing = [k for k in required if k not in pkg]
-          if missing:
-              print(f'$f: missing fields: {missing}')
-              sys.exit(1)
-          " || exit 1
-          done
-          echo "All required fields present."
+      - name: Validate recipes
+        run: python3 scripts/validate_recipes.py
 
-      - name: Check GPG signature on commits
+      - name: Check GPG signatures (advisory)
+        if: github.event_name == 'pull_request'
         run: |
-          # Verify the PR commits are signed
-          for sha in $(git log --format=%H origin/main..HEAD); do
+          for sha in $(git log --format=%H origin/${{ github.base_ref }}..HEAD); do
             if ! git verify-commit "$sha" 2>/dev/null; then
-              echo "WARNING: Commit $sha is not GPG-signed (recommended but not blocking)"
+              echo "::warning::Commit $sha is not GPG-signed"
             fi
           done

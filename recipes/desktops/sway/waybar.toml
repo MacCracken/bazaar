@@ -1,6 +1,5 @@
-# swaybar — status bar for sway (ships with sway, but can be replaced)
-# Note: swaybar is built as part of sway. This recipe is for waybar,
-# the more popular standalone status bar used with sway.
+# waybar — highly customizable Wayland bar for sway and other compositors
+# swaybar ships with sway itself; waybar is the popular standalone replacement.
 
 [package]
 name = "waybar"
