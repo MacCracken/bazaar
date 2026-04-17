@@ -1,0 +1,17 @@
+# Bazaar — community recipe repository for AGNOS
+# Recipes are .cyml files; tooling is written in Cyrius where possible.
+
+[package]
+name = "bazaar"
+version = "0.1.0"
+description = "Bazaar — community recipe repository for AGNOS"
+license = "GPL-3.0-only"
+language = "cyrius"
+cyrius = "5.1.12"
+
+[build]
+entry = "scripts/validate_recipes.cyr"
+output = "build/bazaar-validate"
+
+[deps]
+stdlib = ["string", "fmt", "alloc", "vec", "str", "io", "syscalls", "fs", "toml"]

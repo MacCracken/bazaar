@@ -6,7 +6,7 @@ Community package repository for [AGNOS](https://github.com/MacCracken/agnostico
 
 ## How It Works
 
-1. Community members submit takumi recipe TOMLs via pull request
+1. Community members submit takumi recipe CYMLs via pull request
 2. Maintainers review for security and correctness
 3. Users install via `ark bazaar install <package>`
 4. Packages build locally via takumi or download from build mirror
@@ -27,16 +27,18 @@ ark bazaar update
 ark bazaar list
 
 # Submit a recipe for review
-ark bazaar submit recipes/editors/neovim.toml
+ark bazaar submit recipes/editors/neovim.cyml
 ```
 
 ## Submitting a Recipe
 
 1. Fork this repo
-2. Create a recipe TOML in the appropriate category under `recipes/`
+2. Create a recipe CYML in the appropriate category under `recipes/`
 3. Follow the [takumi recipe format](https://github.com/MacCracken/agnosticos/blob/main/recipes/README.md)
 4. Sign your commit with GPG
 5. Open a pull request
+
+Recipes are [Cyrius](https://github.com/MacCracken/cyrius) CYML files — same syntax as TOML with `.cyml` extension. Matches zugot convention. Toolchain is pinned in `cyrius.cyml`.
 
 ### Recipe Categories
 

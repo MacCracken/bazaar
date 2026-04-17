@@ -1,0 +1,18 @@
+[package]
+name = "bar"
+version = "1.0.0"
+description = "filename foo.cyml but package name is bar"
+license = "MIT"
+groups = ["tools"]
+
+[source]
+url = "https://example.org/bar-1.0.0.tar.gz"
+sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+
+[depends]
+runtime = ["glibc"]
+build = ["gcc"]
+
+[build]
+make = "make"
+install = "make install"

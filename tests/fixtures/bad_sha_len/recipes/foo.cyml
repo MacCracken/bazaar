@@ -1,0 +1,18 @@
+[package]
+name = "foo"
+version = "1.0.0"
+description = "sha256 has wrong length (32 chars instead of 64)"
+license = "MIT"
+groups = ["tools"]
+
+[source]
+url = "https://example.org/foo-1.0.0.tar.gz"
+sha256 = "e3b0c44298fc1c149afbf4c8996fb924"
+
+[depends]
+runtime = ["glibc"]
+build = ["gcc"]
+
+[build]
+make = "make"
+install = "make install"

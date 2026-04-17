@@ -1,0 +1,203 @@
+# validate_recipes.cyr — Cyrius-native recipe validator for bazaar
+#
+# Walks recipes/ and checks every .cyml for required keys,
+# filename-matches-package-name, and sha256 format.
+#
+# NOTE: The cyrius stdlib `toml` parser currently flattens sections
+# (treats `[package]` as an unknown line and collects all keys in one
+# namespace). Section-level checks are therefore coarse — we verify
+# required keys exist *somewhere* in the recipe. A future pass can
+# switch to nous' `cyml_parse` once it lands in stdlib.
+#
+# Build: cyrius build scripts/validate_recipes.cyr build/bazaar-validate
+# Run:   ./build/bazaar-validate   (from repo root)
+
+var g_errors = 0;
+var g_warnings = 0;
+var g_cmdline[4096];
+var g_cmdline_len = 0;
+
+# Read /proc/self/cmdline into our global buffer.
+# Stdlib args_init stores a stack pointer in a global — dangles. We use
+# a global buffer so the pointer stays valid for the life of the program.
+fn read_cmdline() {
+    var fd = syscall(2, "/proc/self/cmdline", 0, 0);
+    if (fd < 0) { return 0; }
+    g_cmdline_len = syscall(0, fd, &g_cmdline, 4096);
+    syscall(3, fd);
+    return g_cmdline_len;
+}
+
+# Return pointer to the nth null-terminated argv string, or 0 if absent.
+fn arg_at(n) {
+    if (g_cmdline_len <= 0) { return 0; }
+    if (n == 0) { return &g_cmdline; }
+    var count = 0;
+    var i = 0;
+    while (i < g_cmdline_len) {
+        if (load8(&g_cmdline + i) == 0) {
+            count = count + 1;
+            if (count == n) {
+                if (i + 1 >= g_cmdline_len) { return 0; }
+                return &g_cmdline + i + 1;
+            }
+        }
+        i = i + 1;
+    }
+    return 0;
+}
+
+fn print_cstr(s) {
+    syscall(1, 1, s, strlen(s));
+    return 0;
+}
+
+fn println_cstr(s) {
+    print_cstr(s);
+    syscall(1, 1, "\n", 1);
+    return 0;
+}
+
+fn report_error(path, msg) {
+    str_print(path);
+    print_cstr(": error: ");
+    print_cstr(msg);
+    syscall(1, 1, "\n", 1);
+    g_errors = g_errors + 1;
+    return 0;
+}
+
+fn report_warn(path, msg) {
+    str_print(path);
+    print_cstr(": warning: ");
+    print_cstr(msg);
+    syscall(1, 1, "\n", 1);
+    g_warnings = g_warnings + 1;
+    return 0;
+}
+
+fn require_key(pairs, key, path) {
+    if (toml_get(pairs, key) == 0) {
+        str_print(path);
+        print_cstr(": error: missing key '");
+        print_cstr(key);
+        println_cstr("'");
+        g_errors = g_errors + 1;
+    }
+    return 0;
+}
+
+fn is_hex64(s) {
+    if (str_len(s) != 64) { return 0; }
+    var data = str_data(s);
+    var i = 0;
+    while (i < 64) {
+        var c = load8(data + i);
+        var ok = 0;
+        if (c >= 48 && c <= 57) { ok = 1; }
+        if (c >= 97 && c <= 102) { ok = 1; }
+        if (c >= 65 && c <= 70) { ok = 1; }
+        if (ok == 0) { return 0; }
+        i = i + 1;
+    }
+    return 1;
+}
+
+fn recipe_stem(path) {
+    var base = path_basename(path);
+    var blen = str_len(base);
+    # strip ".cyml" (5 chars)
+    if (blen > 5) { return str_substr(base, 0, blen - 5); }
+    return base;
+}
+
+fn validate_file(path) {
+    var sections = toml_parse_file(str_cstr(path));
+    if (vec_len(sections) == 0) {
+        report_error(path, "parse error or empty file");
+        return 0;
+    }
+    # Flat-pair mode: collect all pairs from all sections into one view.
+    var pairs = toml_section_pairs(vec_get(sections, 0));
+
+    require_key(pairs, "name", path);
+    require_key(pairs, "version", path);
+    require_key(pairs, "description", path);
+    require_key(pairs, "license", path);
+    require_key(pairs, "groups", path);
+    require_key(pairs, "url", path);
+    require_key(pairs, "sha256", path);
+    require_key(pairs, "runtime", path);
+    require_key(pairs, "make", path);
+    require_key(pairs, "install", path);
+
+    var name = toml_get(pairs, "name");
+    if (name > 0) {
+        var stem = recipe_stem(path);
+        if (str_eq(name, stem) == 0) {
+            str_print(path);
+            print_cstr(": error: filename stem '");
+            str_print(stem);
+            print_cstr("' != package name '");
+            str_print(name);
+            println_cstr("'");
+            g_errors = g_errors + 1;
+        }
+    }
+
+    var version = toml_get(pairs, "version");
+    var url = toml_get(pairs, "url");
+    if (version > 0 && url > 0 && str_len(version) > 0) {
+        if (str_contains(url, version) == 0) {
+            report_warn(path, "version string not found in source url");
+        }
+    }
+
+    var sha = toml_get(pairs, "sha256");
+    if (sha > 0) {
+        var slen = str_len(sha);
+        if (slen == 0) {
+            report_warn(path, "sha256 is empty (must be populated before merge)");
+        } elif (is_hex64(sha) == 0) {
+            report_error(path, "sha256 is not a 64-char hex digest");
+        }
+    }
+
+    return 0;
+}
+
+fn main() {
+    alloc_init();
+    read_cmdline();
+
+    var root_cstr = arg_at(1);
+    var root = str_from("recipes");
+    if (root_cstr != 0) { root = str_from(root_cstr); }
+
+    var files = find_files(root, str_from("cyml"));
+    var total = vec_len(files);
+    if (total == 0) {
+        println_cstr("no .cyml recipes found under recipes/");
+        return 2;
+    }
+
+    var i = 0;
+    while (i < total) {
+        validate_file(vec_get(files, i));
+        i = i + 1;
+    }
+
+    syscall(1, 1, "\n", 1);
+    fmt_int(total);
+    print_cstr(" recipes checked — ");
+    fmt_int(g_errors);
+    print_cstr(" error(s), ");
+    fmt_int(g_warnings);
+    println_cstr(" warning(s)");
+
+    if (g_errors > 0) { return 1; }
+    return 0;
+}
+
+var exit_code = main();
+syscall(60, exit_code);

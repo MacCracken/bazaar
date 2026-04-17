@@ -1,0 +1,18 @@
+[package]
+name = "foo"
+version = "1.0.0"
+description = "sha256 has non-hex characters (z, q)"
+license = "MIT"
+groups = ["tools"]
+
+[source]
+url = "https://example.org/foo-1.0.0.tar.gz"
+sha256 = "zzzzc44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852bqqq"
+
+[depends]
+runtime = ["glibc"]
+build = ["gcc"]
+
+[build]
+make = "make"
+install = "make install"

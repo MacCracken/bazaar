@@ -1,0 +1,20 @@
+[package]
+name = "hello"
+version = "1.2.3"
+description = "hello — control fixture, should pass with no findings"
+license = "MIT"
+groups = ["tools"]
+
+[source]
+url = "https://example.org/hello-1.2.3.tar.gz"
+sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+
+[depends]
+runtime = ["glibc"]
+build = ["gcc"]
+
+[build]
+configure = ""
+make = "make"
+check = ""
+install = "make install"

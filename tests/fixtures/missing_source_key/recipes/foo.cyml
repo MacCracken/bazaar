@@ -1,0 +1,16 @@
+[package]
+name = "foo"
+version = "1.0.0"
+description = "missing url and sha256 in source"
+license = "MIT"
+groups = ["tools"]
+
+[source]
+
+[depends]
+runtime = ["glibc"]
+build = ["gcc"]
+
+[build]
+make = "make"
+install = "make install"

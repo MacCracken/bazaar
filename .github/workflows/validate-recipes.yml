@@ -3,8 +3,11 @@ name: Validate Recipes
 on:
   pull_request:
     paths:
-      - 'recipes/**/*.toml'
-      - 'scripts/validate_recipes.py'
+      - 'recipes/**/*.cyml'
+      - 'scripts/validate_recipes.cyr'
+      - 'tests/**'
+      - 'benches/**'
+      - 'cyrius.cyml'
       - '.github/workflows/validate-recipes.yml'
   push:
     branches: [main]
@@ -12,15 +15,42 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    env:
+      CYRIUS_VERSION: "5.1.12"
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+      - name: Install Cyrius toolchain
+        run: |
+          git clone --depth=1 --branch "v${CYRIUS_VERSION}" \
+            https://github.com/MacCracken/cyrius.git "$HOME/cyrius-src"
+          cd "$HOME/cyrius-src"
+          sh bootstrap/bootstrap.sh
+          cat stage1/cc2.cyr | ./build/stage1f > ./build/cc2
+          chmod +x ./build/cc2
+          mkdir -p "$HOME/.local/bin"
+          install -m755 build/cc2 "$HOME/.local/bin/cc2"
+          # Build the `cyrius` wrapper if shipped in this release
+          if [ -f stage1/programs/cyrius.cyr ]; then
+            cat stage1/programs/cyrius.cyr | ./build/cc2 > ./build/cyrius
+            chmod +x ./build/cyrius
+            install -m755 build/cyrius "$HOME/.local/bin/cyrius"
+          fi
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Build validator
+        run: |
+          mkdir -p build
+          cyrius build scripts/validate_recipes.cyr build/bazaar-validate
 
       - name: Validate recipes
-        run: python3 scripts/validate_recipes.py
+        run: ./build/bazaar-validate
+
+      - name: Run validator tests
+        run: tests/run.sh
+
+      - name: Benchmark validator (regression check)
+        run: benches/run.sh --check
 
       - name: Check GPG signatures (advisory)
         if: github.event_name == 'pull_request'

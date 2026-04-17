@@ -1,0 +1,17 @@
+[package]
+version = "1.0.0"
+description = "missing name key"
+license = "MIT"
+groups = ["tools"]
+
+[source]
+url = "https://example.org/foo-1.0.0.tar.gz"
+sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+
+[depends]
+runtime = ["glibc"]
+build = ["gcc"]
+
+[build]
+make = "make"
+install = "make install"
