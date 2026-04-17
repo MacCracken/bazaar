@@ -2,48 +2,31 @@
 
 **Persian: بازار — marketplace/gathering**
 
-Community package repository for [AGNOS](https://github.com/MacCracken/agnosticos). Like Arch's AUR, but for ark.
+Community recipe overlay for [AGNOS](https://github.com/MacCracken/agnosticos). Like Arch's AUR, but sitting on top of [zugot](https://github.com/MacCracken/zugot) (the official AGNOS recipe set).
 
-## How It Works
+**Recipes:** 90 across 8 categories, all `.cyml` ([Cyrius](https://github.com/MacCracken/cyrius) markup, TOML-compatible syntax).
 
-1. Community members submit takumi recipe CYMLs via pull request
-2. Maintainers review for security and correctness
-3. Users install via `ark bazaar install <package>`
-4. Packages build locally via takumi or download from build mirror
+## How it works
 
-## Usage
+1. Community members submit recipe CYMLs via pull request.
+2. CI validates the recipe; maintainers review for security and correctness.
+3. Users install via `ark bazaar install <package>` — builds locally in a sandbox or downloads from the build mirror.
+4. Dependencies resolve against `zugot ∪ bazaar`. Bazaar recipes never redefine zugot packages.
 
-```bash
-# Search for a package
-ark bazaar search neovim
+## User commands
 
-# Install a package (builds locally via takumi)
-ark bazaar install neovim
-
-# Update the recipe index
-ark bazaar update
-
-# List installed community packages
-ark bazaar list
-
-# Submit a recipe for review
+```sh
+ark bazaar search neovim                     # find a package
+ark bazaar install neovim                    # build + install
+ark bazaar update                            # refresh recipe index
+ark bazaar list                              # list installed
 ark bazaar submit recipes/editors/neovim.cyml
 ```
 
-## Submitting a Recipe
-
-1. Fork this repo
-2. Create a recipe CYML in the appropriate category under `recipes/`
-3. Follow the [takumi recipe format](https://github.com/MacCracken/agnosticos/blob/main/recipes/README.md)
-4. Sign your commit with GPG
-5. Open a pull request
-
-Recipes are [Cyrius](https://github.com/MacCracken/cyrius) CYML files — same syntax as TOML with `.cyml` extension. Matches zugot convention. Toolchain is pinned in `cyrius.cyml`.
-
-### Recipe Categories
+## Recipe categories
 
 | Directory | Contents |
-|-----------|----------|
+|---|---|
 | `recipes/editors/` | Text editors, IDEs |
 | `recipes/tools/` | CLI tools, utilities |
 | `recipes/media/` | Media players, editors, codecs |
@@ -51,24 +34,45 @@ Recipes are [Cyrius](https://github.com/MacCracken/cyrius) CYML files — same s
 | `recipes/security/` | Security tools, password managers |
 | `recipes/ai/` | AI/ML tools, models, runtimes |
 | `recipes/games/` | Games and emulators |
+| `recipes/desktops/` | Wayland compositors, desktop applications |
 
-### Recipe Requirements
+## Trust model
 
-- Must build from source (no pre-compiled binaries)
-- Must include `sha256` checksum for source tarballs
-- Must specify all runtime and build dependencies
-- Must work with the AGNOS base system (no glibc version assumptions)
-- GPG-signed commits required
-- Filename stem must match `[package].name` — unless `[package].pkgbase` is set, in which case the filename stem must match `pkgbase`. Use `pkgbase` for parallel versions (`python3.12` / `python3.13`), filesystem-unsafe characters (`libsigc++` → `libsigcpp.cyml`), or scope suffixes (`kernel-edge` → `kernel.cyml`).
+- Every recipe is reviewed by a maintainer before merge.
+- Community packages run in a restricted sandbox by default — no network access.
+- Packages requiring network access must be explicitly approved.
+- GPG signature verification on all recipe commits (advisory in CI, enforced at merge).
 
-## Trust Model
+## Development
 
-- All recipes are reviewed by maintainers before merging
-- Community packages run in a restricted sandbox by default (no network access)
-- Packages requiring network access must be explicitly approved
-- GPG signature verification on all recipe commits
+```sh
+# Build the validator (requires cyrius 5.2.0+)
+cyrius build scripts/validate_recipes.cyr build/bazaar-validate
+
+# Validate all recipes
+./build/bazaar-validate
+
+# Run the test suite (9 fixtures)
+sh tests/run.sh
+
+# Benchmark with regression check
+sh benches/run.sh --check
+```
+
+CI runs all of the above on every PR. See [`.github/workflows/validate-recipes.yml`](.github/workflows/validate-recipes.yml).
+
+## Documentation
+
+- **[Contributing](docs/contributing.md)** — how to submit a recipe, what reviewers look for
+- **[Recipe format](docs/recipe-format.md)** — complete schema reference
+- **[Validator](docs/validator.md)** — how the validator works, how to extend it
+- **[ADRs](docs/adr/)** — architectural decisions:
+  - [001 — Use `.cyml` over `.toml`](docs/adr/001-cyml-over-toml.md)
+  - [002 — Cyrius-native validator](docs/adr/002-cyrius-native-validator.md)
+  - [003 — `pkgbase` for filename / name divergence](docs/adr/003-pkgbase-for-filename-divergence.md)
+  - [004 — POSIX `sh` for CI scripts](docs/adr/004-posix-sh-for-ci-scripts.md)
+  - [005 — Bazaar sits on top of zugot](docs/adr/005-bazaar-on-zugot.md)
 
 ## License
 
-Recipes in this repository are individually licensed by their authors.
-The repository infrastructure is licensed under GPL-3.0.
+Recipes are individually licensed by their authors. Repository infrastructure is GPL-3.0-only.
