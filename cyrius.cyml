@@ -3,7 +3,9 @@
 
 [package]
 name = "bazaar"
-version = "0.1.0"
+# Versioned in lockstep with zugot — each bazaar release is validated against
+# a specific zugot tag (see [deps.zugot]), so they share the same version.
+version = "1.0.0"
 description = "Bazaar — community recipe repository for AGNOS"
 license = "GPL-3.0-only"
 language = "cyrius"

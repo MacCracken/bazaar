@@ -17,21 +17,35 @@ jobs:
     needs: [ci]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      # SHA-pinned against tag retargeting. See docs/audit/2026-04-16.md F1.
+      # Bump SHA and comment together.
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
 
-      - name: Verify version
+      - name: Verify version (lockstep with zugot)
+        env:
+          TAG: ${{ github.ref_name }}
         run: |
           FILE_VERSION=$(cat VERSION | tr -d '[:space:]')
-          TAG="${GITHUB_REF_NAME}"
           [ "$FILE_VERSION" = "$TAG" ] || { echo "VERSION ($FILE_VERSION) != tag ($TAG)"; exit 1; }
+          # Bazaar releases are pinned to a specific zugot tag. The two repos
+          # version in lockstep — the tag we're releasing must match the zugot
+          # tag declared in [deps.zugot]. Prevents shipping a bazaar release
+          # against a stale zugot dist.
+          ZUGOT_TAG=$(awk -F'"' '/^tag\s*=/ && seen {print $2; exit} /^\[deps\.zugot\]/ {seen=1}' cyrius.cyml)
+          [ "$ZUGOT_TAG" = "$TAG" ] || { echo "bazaar tag ($TAG) != [deps.zugot].tag ($ZUGOT_TAG) — release would ship desynced from zugot"; exit 1; }
+          echo "verified: VERSION=$FILE_VERSION, tag=$TAG, zugot=$ZUGOT_TAG"
 
       - name: Archive
+        env:
+          TAG: ${{ github.ref_name }}
         run: |
-          TAG="${GITHUB_REF_NAME}"
           git archive --format=tar.gz --prefix="bazaar-${TAG}/" -o "bazaar-${TAG}-src.tar.gz" HEAD
           sha256sum bazaar-*.tar.gz > SHA256SUMS
 
-      - uses: softprops/action-gh-release@v2
+      # Third-party action — SHA-pinned (higher risk than first-party actions/*,
+      # step runs with `contents: write` and access to GITHUB_TOKEN).
+      # See docs/audit/2026-04-16.md F1; same mitigation class as CVE-2025-30066.
+      - uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65  # v2
         with:
           name: "Bazaar ${{ github.ref_name }}"
           generate_release_notes: true
