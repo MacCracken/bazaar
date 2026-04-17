@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # benches/run.sh — measure validator runtime on the full recipes/ corpus
 # and append a row to bench-history.csv.
 #
@@ -9,7 +9,7 @@
 #
 # CSV columns: utc_iso, git_sha, n_recipes, iterations, min_ms, median_ms, mean_ms, max_ms
 
-set -euo pipefail
+set -eu
 cd "$(dirname "$0")/.."
 
 VALIDATOR=build/bazaar-validate
@@ -34,10 +34,10 @@ fi
 
 N_RECIPES=$(find recipes -name '*.cyml' -type f | wc -l | tr -d ' ')
 
-# Benchmark loop. We time via Python perf_counter to avoid /usr/bin/time
-# portability issues; Python itself isn't in the hot path.
-python3 - "$VALIDATOR" "$ITERS" "$WARMUPS" >/tmp/bazaar-bench.json <<'PY'
-import json, statistics, subprocess, sys, time
+# Benchmark loop. Time via Python perf_counter — portable and the interpreter
+# itself is not in the hot path (we're measuring a subprocess).
+python3 - "$VALIDATOR" "$ITERS" "$WARMUPS" >/tmp/bazaar-bench.txt <<'PY'
+import statistics, subprocess, sys, time
 validator, iters, warmups = sys.argv[1], int(sys.argv[2]), int(sys.argv[3])
 for _ in range(warmups):
     subprocess.run([validator], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -46,18 +46,12 @@ for _ in range(iters):
     t = time.perf_counter()
     subprocess.run([validator], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     samples.append((time.perf_counter() - t) * 1000.0)
-json.dump({
-    "min":    min(samples),
-    "median": statistics.median(samples),
-    "mean":   statistics.mean(samples),
-    "max":    max(samples),
-}, sys.stdout)
+# Emit space-separated stats; shell parses via read.
+print(f"{min(samples):.3f} {statistics.median(samples):.3f} {statistics.mean(samples):.3f} {max(samples):.3f}")
 PY
 
-read -r MIN MEDIAN MEAN MAX < <(python3 -c "
-import json; d=json.load(open('/tmp/bazaar-bench.json'))
-print(f\"{d['min']:.3f} {d['median']:.3f} {d['mean']:.3f} {d['max']:.3f}\")")
-rm -f /tmp/bazaar-bench.json
+read -r MIN MEDIAN MEAN MAX < /tmp/bazaar-bench.txt
+rm -f /tmp/bazaar-bench.txt
 
 UTC=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 SHA=$(git rev-parse --short=12 HEAD 2>/dev/null || echo "unknown")

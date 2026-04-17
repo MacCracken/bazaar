@@ -1,5 +1,5 @@
-#!/usr/bin/env bash
-# tests/run.sh — validator test suite
+#!/bin/sh
+# tests/run.sh — validator test suite (POSIX sh, runs under dash too)
 #
 # Builds the validator if needed, then runs it against each fixture in
 # tests/fixtures/ and asserts the exit code and the number of error/warning
@@ -17,29 +17,22 @@ if [ ! -x "$VALIDATOR" ] || [ "$VALIDATOR" -ot scripts/validate_recipes.cyr ]; t
     cyrius build scripts/validate_recipes.cyr "$VALIDATOR" >/dev/null 2>&1
 fi
 
-# fixture            expected_exit  expected_errors  expected_warnings
-CASES=(
-    "ok                  0  0  0"
-    "missing_name        1  1  0"
-    "wrong_filename      1  1  0"
-    "bad_sha_len         1  1  0"
-    "non_hex_sha         1  1  0"
-    "missing_source_key  1  2  0"
-    "empty               1  1  0"
-    "pkgbase_ok          0  0  0"
-    "pkgbase_mismatch    1  1  0"
-)
-
 pass=0
 fail=0
-for row in "${CASES[@]}"; do
-    read -r name exp_exit exp_err exp_warn <<<"$row"
+
+run_case() {
+    name=$1
+    exp_exit=$2
+    exp_err=$3
+    exp_warn=$4
+
     out=$("$VALIDATOR" "tests/fixtures/$name/recipes" 2>&1)
     got_exit=$?
-    # Parse the summary line: "N recipes checked — E error(s), W warning(s)"
     summary=$(printf '%s\n' "$out" | grep -E 'recipes checked' || true)
-    got_err=$(printf '%s\n' "$summary" | grep -oE '[0-9]+ error' | grep -oE '[0-9]+' || echo 0)
-    got_warn=$(printf '%s\n' "$summary" | grep -oE '[0-9]+ warning' | grep -oE '[0-9]+' || echo 0)
+    got_err=$(printf '%s\n' "$summary" | grep -oE '[0-9]+ error' | grep -oE '[0-9]+')
+    got_warn=$(printf '%s\n' "$summary" | grep -oE '[0-9]+ warning' | grep -oE '[0-9]+')
+    : "${got_err:=0}"
+    : "${got_warn:=0}"
 
     if [ "$got_exit" = "$exp_exit" ] && [ "$got_err" = "$exp_err" ] && [ "$got_warn" = "$exp_warn" ]; then
         printf 'PASS  %-22s exit=%s errors=%s warnings=%s\n' "$name" "$got_exit" "$got_err" "$got_warn"
@@ -50,7 +43,18 @@ for row in "${CASES[@]}"; do
         printf '      output:\n%s\n' "$out" | sed 's/^/      /'
         fail=$((fail + 1))
     fi
-done
+}
+
+#         fixture             exit err warn
+run_case  ok                    0   0   0
+run_case  missing_name          1   1   0
+run_case  wrong_filename        1   1   0
+run_case  bad_sha_len           1   1   0
+run_case  non_hex_sha           1   1   0
+run_case  missing_source_key    1   2   0
+run_case  empty                 1   1   0
+run_case  pkgbase_ok            0   0   0
+run_case  pkgbase_mismatch      1   1   0
 
 echo
 echo "$pass passed, $fail failed"
