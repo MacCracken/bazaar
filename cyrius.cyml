@@ -23,5 +23,5 @@ stdlib = ["string", "fmt", "alloc", "vec", "str", "io", "syscalls", "fs", "toml"
 [deps.zugot]
 git = "https://github.com/MacCracken/zugot.git"
 path = "../zugot"
-branch = "main"
+tag = "1.0.0"
 modules = ["dist/zugot.cyr"]
