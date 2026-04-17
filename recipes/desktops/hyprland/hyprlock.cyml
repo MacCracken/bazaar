@@ -12,7 +12,7 @@ url = "https://github.com/hyprwm/hyprlock/archive/refs/tags/v0.7.1.tar.gz"
 sha256 = ""
 
 [depends]
-runtime = ["glibc", "wayland", "mesa", "cairo", "pango", "pam", "hyprlang", "hyprutils", "sdbus-cpp"]
+runtime = ["glibc", "wayland", "mesa", "cairo", "pango", "linux-pam", "hyprlang", "hyprutils", "sdbus-cpp"]
 build = ["cmake", "ninja", "wayland"]
 
 [build]

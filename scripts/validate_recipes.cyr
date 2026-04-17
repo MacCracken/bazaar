@@ -131,15 +131,28 @@ fn validate_file(path) {
     require_key(pairs, "make", path);
     require_key(pairs, "install", path);
 
+    # Filename stem must match [package].name by default.
+    # Recipes that ship parallel versions (e.g. python3.12 alongside python3.13)
+    # or use filesystem-unsafe characters (libsigc++) can opt out by declaring
+    # [package].pkgbase — filename stem then must match pkgbase instead.
     var name = toml_get(pairs, "name");
+    var pkgbase = toml_get(pairs, "pkgbase");
     if (name > 0) {
         var stem = recipe_stem(path);
-        if (str_eq(name, stem) == 0) {
+        var expected = name;
+        var expected_label = "package name";
+        if (pkgbase > 0) {
+            expected = pkgbase;
+            expected_label = "pkgbase";
+        }
+        if (str_eq(expected, stem) == 0) {
             str_print(path);
             print_cstr(": error: filename stem '");
             str_print(stem);
-            print_cstr("' != package name '");
-            str_print(name);
+            print_cstr("' != ");
+            print_cstr(expected_label);
+            print_cstr(" '");
+            str_print(expected);
             println_cstr("'");
             g_errors = g_errors + 1;
         }

@@ -12,7 +12,7 @@ url = "https://github.com/jirutka/swaylock-effects/archive/refs/tags/v1.7.0.0.ta
 sha256 = ""
 
 [depends]
-runtime = ["glibc", "wayland", "cairo", "gdk-pixbuf", "pam"]
+runtime = ["glibc", "wayland", "cairo", "gdk-pixbuf", "linux-pam"]
 build = ["meson", "ninja", "wayland", "scdoc"]
 
 [build]

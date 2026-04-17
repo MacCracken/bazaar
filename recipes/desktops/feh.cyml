@@ -17,7 +17,7 @@ sha256 = ""
 patches = []
 
 [depends]
-runtime = ["glibc", "imlib2", "libcurl", "libpng", "libjpeg-turbo", "libxinerama", "libxt"]
+runtime = ["glibc", "imlib2", "curl", "libpng", "libjpeg-turbo", "libxinerama", "libxt"]
 build = ["gcc", "make", "pkgconf"]
 optional = ["libexif", "libtiff"]
 

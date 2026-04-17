@@ -26,6 +26,8 @@ CASES=(
     "non_hex_sha         1  1  0"
     "missing_source_key  1  2  0"
     "empty               1  1  0"
+    "pkgbase_ok          0  0  0"
+    "pkgbase_mismatch    1  1  0"
 )
 
 pass=0

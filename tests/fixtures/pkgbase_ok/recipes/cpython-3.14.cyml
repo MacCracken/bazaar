@@ -1,0 +1,24 @@
+# Happy path: package "python3.14" ships as cpython-3.14.cyml via pkgbase.
+# Matches the zugot pattern for parallel language runtimes.
+
+[package]
+name = "python3.14"
+pkgbase = "cpython-3.14"
+version = "3.14.0"
+description = "cpython 3.14 — parallel-version slot"
+license = "PSF-2.0"
+groups = ["tools"]
+
+[source]
+url = "https://www.python.org/ftp/python/3.14.0/Python-3.14.0.tar.xz"
+sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+
+[depends]
+runtime = ["glibc"]
+build = ["gcc", "make"]
+
+[build]
+configure = "./configure --prefix=/usr"
+make = "make -j$(nproc)"
+check = ""
+install = "make DESTDIR=$PKG install"

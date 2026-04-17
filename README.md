@@ -59,6 +59,7 @@ Recipes are [Cyrius](https://github.com/MacCracken/cyrius) CYML files — same s
 - Must specify all runtime and build dependencies
 - Must work with the AGNOS base system (no glibc version assumptions)
 - GPG-signed commits required
+- Filename stem must match `[package].name` — unless `[package].pkgbase` is set, in which case the filename stem must match `pkgbase`. Use `pkgbase` for parallel versions (`python3.12` / `python3.13`), filesystem-unsafe characters (`libsigc++` → `libsigcpp.cyml`), or scope suffixes (`kernel-edge` → `kernel.cyml`).
 
 ## Trust Model
 

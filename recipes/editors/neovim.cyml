@@ -13,7 +13,7 @@ url = "https://github.com/neovim/neovim/archive/refs/tags/v0.11.1.tar.gz"
 sha256 = ""
 
 [depends]
-runtime = ["glibc", "libluajit", "libuv", "msgpack-c", "tree-sitter", "unibilium"]
+runtime = ["glibc", "luajit", "libuv", "msgpack-c", "tree-sitter", "unibilium"]
 build = ["cmake", "make", "gcc", "gettext"]
 
 [build]

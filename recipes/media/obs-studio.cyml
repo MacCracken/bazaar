@@ -12,7 +12,7 @@ url = "https://github.com/obsproject/obs-studio/archive/refs/tags/31.0.2.tar.gz"
 sha256 = ""
 
 [depends]
-runtime = ["glibc", "qt6-base", "pipewire", "libx264", "mbedtls", "jansson", "curl"]
+runtime = ["glibc", "qt6-base", "pipewire", "x264", "mbedtls", "jansson", "curl"]
 build = ["cmake", "gcc", "qt6-base", "pipewire", "swig"]
 
 [build]

@@ -14,7 +14,7 @@ url = "https://ffmpeg.org/releases/ffmpeg-7.1.1.tar.xz"
 sha256 = ""
 
 [depends]
-runtime = ["glibc", "libx264", "libx265", "libvpx", "opus", "lame", "libass", "freetype", "fribidi", "zlib"]
+runtime = ["glibc", "x264", "x265", "libvpx", "opus", "lame", "libass", "freetype", "fribidi", "zlib"]
 build = ["gcc", "make", "nasm", "pkg-config"]
 
 [build]

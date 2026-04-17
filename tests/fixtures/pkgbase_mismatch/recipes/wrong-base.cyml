@@ -1,0 +1,21 @@
+# pkgbase is set but filename stem does not match it — must still error.
+
+[package]
+name = "foo3.14"
+pkgbase = "cfoo-3.14"
+version = "3.14.0"
+description = "pkgbase does not match filename stem"
+license = "MIT"
+groups = ["tools"]
+
+[source]
+url = "https://example.org/foo-3.14.0.tar.gz"
+sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+
+[depends]
+runtime = ["glibc"]
+build = ["gcc"]
+
+[build]
+make = "make"
+install = "make install"
