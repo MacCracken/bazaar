@@ -11,6 +11,8 @@ on:
       - '.github/workflows/validate-recipes.yml'
   push:
     branches: [main]
+  # Allows release.yml to gate on this workflow via `jobs.ci.uses: ...`.
+  workflow_call:
 
 # Least-privilege token. See docs/audit/2026-04-16.md F2.
 permissions:
