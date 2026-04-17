@@ -13,7 +13,7 @@ sha256 = ""
 
 [depends]
 runtime = ["glibc", "qt6-base", "pipewire", "libx264", "mbedtls", "jansson", "curl"]
-build = ["cmake", "gcc", "qt6-base-dev", "pipewire-dev", "swig"]
+build = ["cmake", "gcc", "qt6-base", "pipewire", "swig"]
 
 [build]
 configure = "cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DENABLE_WAYLAND=ON -DENABLE_PIPEWIRE=ON"

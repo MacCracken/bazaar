@@ -14,7 +14,7 @@ sha256 = ""
 
 [depends]
 runtime = ["glibc", "gtk3", "gegl", "babl", "glib", "cairo", "pango", "gdk-pixbuf", "libpng", "libjpeg-turbo", "libtiff"]
-build = ["meson", "ninja", "gcc", "python3", "vala"]
+build = ["meson", "ninja", "gcc", "python", "vala"]
 
 [build]
 configure = "meson setup build --prefix=/usr -Dbuildtype=release"

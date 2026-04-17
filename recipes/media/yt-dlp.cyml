@@ -12,8 +12,8 @@ url = "https://github.com/yt-dlp/yt-dlp/archive/refs/tags/2025.03.31.tar.gz"
 sha256 = ""
 
 [depends]
-runtime = ["python3", "ffmpeg"]
-build = ["python3", "pip"]
+runtime = ["python", "ffmpeg"]
+build = ["python", "pip"]
 
 [build]
 configure = ""

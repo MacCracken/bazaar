@@ -13,8 +13,8 @@ url = "https://github.com/paul-gauthier/aider/archive/refs/tags/v0.83.2.tar.gz"
 sha256 = ""
 
 [depends]
-runtime = ["python3", "git"]
-build = ["python3", "pip"]
+runtime = ["python", "git"]
+build = ["python", "pip"]
 
 [build]
 configure = ""

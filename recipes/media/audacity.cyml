@@ -14,7 +14,7 @@ sha256 = ""
 
 [depends]
 runtime = ["glibc", "wxwidgets", "portaudio", "libsndfile", "libvorbis", "flac", "lame"]
-build = ["cmake", "gcc", "python3"]
+build = ["cmake", "gcc", "python"]
 
 [build]
 configure = "cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr"

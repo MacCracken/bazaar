@@ -14,7 +14,7 @@ sha256 = ""
 
 [depends]
 runtime = ["glibc", "wayland", "gtk3"]
-build = ["meson", "ninja", "wayland-dev"]
+build = ["meson", "ninja", "wayland"]
 
 [build]
 configure = "meson setup build --prefix=/usr -Dbuildtype=release"

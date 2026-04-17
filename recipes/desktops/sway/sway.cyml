@@ -29,7 +29,7 @@ runtime = [
     "pcre2",
     "seatd",
 ]
-build = ["meson", "ninja", "wayland-dev", "wlroots-dev", "scdoc"]
+build = ["meson", "ninja", "wayland", "wlroots", "scdoc"]
 
 [build]
 configure = "meson setup build --prefix=/usr -Dbuildtype=release"

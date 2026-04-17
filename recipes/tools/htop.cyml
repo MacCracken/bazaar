@@ -13,7 +13,7 @@ sha256 = ""
 
 [depends]
 runtime = ["glibc", "ncurses"]
-build = ["gcc", "make", "ncurses-dev"]
+build = ["gcc", "make", "ncurses"]
 
 [build]
 configure = "./configure --prefix=/usr"

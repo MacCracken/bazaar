@@ -17,7 +17,7 @@ sha256 = ""
 patches = []
 
 [depends]
-runtime = ["glibc", "python3", "gtk3", "cups", "dbus", "polkit", "libnotify", "gobject-introspection", "pycups", "pycurl"]
+runtime = ["glibc", "python", "gtk3", "cups", "dbus", "polkit", "libnotify", "gobject-introspection", "pycups", "pycurl"]
 build = ["autoconf", "automake", "gettext", "intltool", "desktop-file-utils", "xmlto"]
 optional = ["libsmbclient"]
 

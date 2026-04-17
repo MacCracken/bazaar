@@ -13,7 +13,7 @@ sha256 = ""
 
 [depends]
 runtime = ["glibc", "wayland", "cairo", "gdk-pixbuf"]
-build = ["meson", "ninja", "wayland-dev", "scdoc"]
+build = ["meson", "ninja", "wayland", "scdoc"]
 
 [build]
 configure = "meson setup build --prefix=/usr -Dbuildtype=release"

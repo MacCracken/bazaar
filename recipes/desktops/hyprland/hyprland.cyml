@@ -36,7 +36,7 @@ runtime = [
     "aquamarine",
     "hyprcursor",
 ]
-build = ["cmake", "ninja", "gcc", "wayland-dev", "hyprwayland-scanner"]
+build = ["cmake", "ninja", "gcc", "wayland", "hyprwayland-scanner"]
 
 [build]
 configure = "cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DNO_SYSTEMD=ON"

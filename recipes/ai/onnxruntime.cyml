@@ -14,7 +14,7 @@ sha256 = ""
 
 [depends]
 runtime = ["glibc", "protobuf"]
-build = ["cmake", "gcc", "python3"]
+build = ["cmake", "gcc", "python"]
 
 [build]
 configure = """

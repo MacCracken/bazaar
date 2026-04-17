@@ -13,8 +13,8 @@ url = "https://github.com/pytorch/pytorch/releases/download/v2.6.0/pytorch-v2.6.
 sha256 = ""
 
 [depends]
-runtime = ["python3", "glibc", "openblas"]
-build = ["python3", "pip", "cmake", "gcc", "openblas-dev"]
+runtime = ["python", "glibc", "openblas"]
+build = ["python", "pip", "cmake", "gcc", "openblas"]
 
 [build]
 configure = ""

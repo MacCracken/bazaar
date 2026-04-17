@@ -19,8 +19,8 @@ sha256 = ""
 patches = []
 
 [depends]
-runtime = ["glibc", "gtk3", "glib", "bluez", "python3", "dbus", "polkit", "libnotify", "pango", "cairo"]
-build = ["gcc", "make", "pkgconf", "python3", "cython", "gobject-introspection", "gettext", "autoconf", "automake", "libtool"]
+runtime = ["glibc", "gtk3", "glib", "bluez", "python", "dbus", "polkit", "libnotify", "pango", "cairo"]
+build = ["gcc", "make", "pkgconf", "python", "cython", "gobject-introspection", "gettext", "autoconf", "automake", "libtool"]
 optional = ["pulseaudio", "pipewire", "networkmanager"]
 
 [build]

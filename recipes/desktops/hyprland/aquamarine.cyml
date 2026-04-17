@@ -13,7 +13,7 @@ sha256 = ""
 
 [depends]
 runtime = ["glibc", "wayland", "libdrm", "mesa", "libinput", "seatd", "pixman", "hyprutils"]
-build = ["cmake", "ninja", "wayland-dev"]
+build = ["cmake", "ninja", "wayland"]
 
 [build]
 configure = "cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr"

@@ -13,8 +13,8 @@ url = "https://github.com/open-webui/open-webui/archive/refs/tags/v0.6.10.tar.gz
 sha256 = ""
 
 [depends]
-runtime = ["python3", "nodejs"]
-build = ["python3", "pip", "nodejs", "npm"]
+runtime = ["python", "nodejs"]
+build = ["python", "pip", "nodejs", "npm"]
 
 [build]
 configure = ""

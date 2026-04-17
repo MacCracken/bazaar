@@ -13,8 +13,8 @@ url = "https://github.com/vllm-project/vllm/archive/refs/tags/v0.8.5.tar.gz"
 sha256 = ""
 
 [depends]
-runtime = ["python3", "pytorch", "glibc"]
-build = ["python3", "pip", "cmake", "gcc"]
+runtime = ["python", "pytorch", "glibc"]
+build = ["python", "pip", "cmake", "gcc"]
 
 [build]
 configure = ""

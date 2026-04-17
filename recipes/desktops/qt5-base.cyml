@@ -20,7 +20,7 @@ patches = []
 
 [depends]
 runtime = ["glibc", "glib", "dbus", "fontconfig", "freetype", "harfbuzz", "icu", "openssl", "zlib", "libpng", "libjpeg-turbo", "sqlite", "pcre2", "libxkbcommon", "wayland", "mesa", "vulkan-loader", "libinput"]
-build = ["gcc", "make", "pkgconf", "perl", "python3"]
+build = ["gcc", "make", "pkgconf", "perl", "python"]
 optional = ["cups", "mariadb", "postgresql", "unixodbc"]
 
 [build]

@@ -14,7 +14,7 @@ sha256 = ""
 
 [depends]
 runtime = ["glibc", "gtk3", "cups", "libxml2", "libxslt", "nss", "icu", "hunspell", "graphite2", "harfbuzz", "poppler"]
-build = ["gcc", "make", "python3", "pkg-config", "zip", "unzip", "perl"]
+build = ["gcc", "make", "python", "pkg-config", "zip", "unzip", "perl"]
 
 [build]
 configure = """
