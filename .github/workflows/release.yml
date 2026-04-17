@@ -1,0 +1,41 @@
+name: Release
+
+on:
+  push:
+    tags: ['[0-9]*']
+
+permissions:
+  contents: write
+
+jobs:
+  ci:
+    name: CI Gate
+    uses: ./.github/workflows/validate-recipes.yml
+
+  release:
+    name: Create Release
+    needs: [ci]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify version
+        run: |
+          FILE_VERSION=$(cat VERSION | tr -d '[:space:]')
+          TAG="${GITHUB_REF_NAME}"
+          [ "$FILE_VERSION" = "$TAG" ] || { echo "VERSION ($FILE_VERSION) != tag ($TAG)"; exit 1; }
+
+      - name: Archive
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          git archive --format=tar.gz --prefix="bazaar-${TAG}/" -o "bazaar-${TAG}-src.tar.gz" HEAD
+          sha256sum bazaar-*.tar.gz > SHA256SUMS
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          name: "Bazaar ${{ github.ref_name }}"
+          generate_release_notes: true
+          prerelease: ${{ startsWith(github.ref_name, '0.') }}
+          files: |
+            bazaar-*.tar.gz
+            SHA256SUMS

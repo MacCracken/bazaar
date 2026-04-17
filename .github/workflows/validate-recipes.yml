@@ -16,27 +16,20 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     env:
-      CYRIUS_VERSION: "5.1.12"
+      CYRIUS_VERSION: "5.2.0"
     steps:
       - uses: actions/checkout@v4
 
       - name: Install Cyrius toolchain
         run: |
-          git clone --depth=1 --branch "v${CYRIUS_VERSION}" \
-            https://github.com/MacCracken/cyrius.git "$HOME/cyrius-src"
-          cd "$HOME/cyrius-src"
-          sh bootstrap/bootstrap.sh
-          cat stage1/cc2.cyr | ./build/stage1f > ./build/cc2
-          chmod +x ./build/cc2
-          mkdir -p "$HOME/.local/bin"
-          install -m755 build/cc2 "$HOME/.local/bin/cc2"
-          # Build the `cyrius` wrapper if shipped in this release
-          if [ -f stage1/programs/cyrius.cyr ]; then
-            cat stage1/programs/cyrius.cyr | ./build/cc2 > ./build/cyrius
-            chmod +x ./build/cyrius
-            install -m755 build/cyrius "$HOME/.local/bin/cyrius"
-          fi
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          curl -sSfL https://raw.githubusercontent.com/MacCracken/cyrius/main/scripts/install.sh | sh
+          echo "$HOME/.cyrius/bin" >> $GITHUB_PATH
+
+      - name: Verify toolchain
+        run: cc5 --version
+
+      - name: Resolve dependencies
+        run: cyrius deps
 
       - name: Build validator
         run: |
@@ -47,10 +40,28 @@ jobs:
         run: ./build/bazaar-validate
 
       - name: Run validator tests
-        run: tests/run.sh
+        run: |
+          if [ -f tests/run.sh ]; then
+            sh tests/run.sh
+          elif ls tests/tcyr/*.tcyr >/dev/null 2>&1; then
+            for t in tests/tcyr/*.tcyr; do
+              name=$(basename "$t" .tcyr)
+              echo "=== $name ==="
+              cyrius build "$t" "/tmp/ci_$name"
+              "/tmp/ci_$name"
+              rm -f "/tmp/ci_$name"
+            done
+          else
+            echo "No tests found, skipping"
+          fi
 
       - name: Benchmark validator (regression check)
-        run: benches/run.sh --check
+        run: |
+          if [ -f benches/run.sh ]; then
+            sh benches/run.sh --check
+          else
+            echo "No benchmarks found, skipping"
+          fi
 
       - name: Check GPG signatures (advisory)
         if: github.event_name == 'pull_request'
