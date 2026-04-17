@@ -24,9 +24,10 @@ Bazaar is a community-overlay recipe repo for AGNOS. Recipes are reviewed for se
 2. **Create** a recipe under the appropriate category: `recipes/{editors,tools,media,networking,security,ai,games,desktops}/mypkg.cyml`. Filename stem must match `[package].name` — see [`recipe-format.md`](recipe-format.md) for the schema.
 3. **Validate locally**:
    ```sh
+   cyrius deps                   # first time — pulls zugot dist module
    cyrius build scripts/validate_recipes.cyr build/bazaar-validate
-   ./build/bazaar-validate
-   tests/run.sh                  # optional but encouraged
+   ./build/bazaar-validate       # also cross-checks your deps against zugot ∪ bazaar
+   sh tests/run.sh               # optional but encouraged
    ```
 4. **Sign your commit** with GPG: `git commit -S -m "add mypkg"`.
 5. **Open a PR**. CI will run the validator, the test suite, the benchmark regression check, and the GPG-signature advisory.
@@ -35,7 +36,7 @@ Bazaar is a community-overlay recipe repo for AGNOS. Recipes are reviewed for se
 
 - All required fields present (see [`recipe-format.md`](recipe-format.md)).
 - `sha256` populated with the actual digest of the source tarball, not left empty.
-- Dependencies resolve against `zugot ∪ bazaar`. If a dep is missing, reviewer will ask you to either:
+- Dependencies resolve against `zugot ∪ bazaar` — the validator enforces this automatically; CI fails with `dep 'X' not provided by zugot or bazaar` on an unresolved name. If a dep is missing:
   - File a request against zugot (for foundational libs), or
   - Add the dep to bazaar first in a separate PR (for community-scoped libs).
 - Version in `[source].url` matches `[package].version`.

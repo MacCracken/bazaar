@@ -4,6 +4,8 @@
 
 Community recipe overlay for [AGNOS](https://github.com/MacCracken/agnosticos). Like Arch's AUR, but sitting on top of [zugot](https://github.com/MacCracken/zugot) (the official AGNOS recipe set).
 
+**Current release:** [`1.0.0`](./VERSION) — versioned [in lockstep with zugot](docs/adr/006-zugot-as-cyrius-dep.md); each bazaar tag validates against the matching zugot tag.
+
 **Recipes:** 90 across 8 categories, all `.cyml` ([Cyrius](https://github.com/MacCracken/cyrius) markup, TOML-compatible syntax).
 
 ## How it works
@@ -46,20 +48,23 @@ ark bazaar submit recipes/editors/neovim.cyml
 ## Development
 
 ```sh
+# Resolve deps (pulls zugot dist module via [deps.zugot])
+cyrius deps
+
 # Build the validator (requires cyrius 5.2.0+)
 cyrius build scripts/validate_recipes.cyr build/bazaar-validate
 
-# Validate all recipes
+# Validate all recipes (includes cross-check against zugot ∪ bazaar names)
 ./build/bazaar-validate
 
-# Run the test suite (9 fixtures)
+# Run the test suite (13 fixtures)
 sh tests/run.sh
 
 # Benchmark with regression check
 sh benches/run.sh --check
 ```
 
-CI runs all of the above on every PR. See [`.github/workflows/validate-recipes.yml`](.github/workflows/validate-recipes.yml).
+CI runs all of the above on every PR via [`validate-recipes.yml`](.github/workflows/validate-recipes.yml). Tag pushes matching `[0-9]*` trigger [`release.yml`](.github/workflows/release.yml), which enforces a three-way lockstep (git tag = `VERSION` file = `[deps.zugot].tag` in `cyrius.cyml`) before cutting a GitHub release.
 
 ## Documentation
 

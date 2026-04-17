@@ -54,10 +54,12 @@ install   = "DESTDIR=$PKG cmake --install build"
 | `runtime` | yes | Packages that must be installed for the binary to run. |
 | `build` | yes | Additional packages needed only to compile. Sandbox has no network, so anything the build invokes must be here. |
 
-Dep names must resolve against `zugot ∪ bazaar`. Use zugot's canonical names:
+Dep names must resolve against `zugot ∪ bazaar` — the validator enforces this at CI time. Use zugot's canonical names:
 - No `-dev` suffix — runtime package ships headers.
-- `lib` prefix follows upstream naming (`curl` but `libsigc++`; `x264` but `libvpx`).
-- For Python bindings: `python-pycups`, `python-pycurl`.
+- `lib` prefix follows upstream naming, no filesystem-unsafe characters (`curl` but `libuv`, `x264` but `libvpx`, `libsigcpp` *not* `libsigc++`).
+- For Python bindings: `pycups`, `pycurl` (short form in zugot 1.0.0+).
+
+If a dep doesn't resolve, the validator errors with `dep 'X' not provided by zugot or bazaar`. Either add `X` to bazaar in a separate recipe, or file the request against zugot.
 
 ### `[build]` — how to compile + install (required)
 
@@ -100,15 +102,19 @@ The validator (`scripts/validate_recipes.cyr`) checks:
 - [x] TOML/CYML parses
 - [x] Required keys present: `name`, `version`, `description`, `license`, `groups`, `url`, `sha256`, `runtime`, `make`, `install`
 - [x] Filename stem matches `name` (or `pkgbase` if set)
+- [x] `name` and `pkgbase` are ASCII-only (homoglyph defense — [audit F3](audit/2026-04-16.md))
+- [x] `[source].url` uses `https://` (no HTTP, FTP, file://, git+ssh:// — [audit F4](audit/2026-04-16.md))
 - [x] `sha256` is 64-char hex (warns if empty, errors on invalid format)
+- [x] Every `[depends]` entry resolves against `zugot ∪ bazaar` — see [ADR-006](adr/006-zugot-as-cyrius-dep.md)
 - [x] Version string appears in source URL (warning)
+- [x] Version has no shell metacharacters (warning — [audit F5](audit/2026-04-16.md))
 
 It does **not** currently check:
 
 - [ ] Section membership (e.g. `sha256` could be at top-level and still pass) — limitation of the stdlib TOML parser, see [ADR-002](adr/002-cyrius-native-validator.md)
-- [ ] Dep resolution against zugot (manual cross-check via `noted-issues-bazaar-finds.md`)
 - [ ] License is a real SPDX identifier
 - [ ] URL is reachable
+- [ ] Typosquat detection against existing package names — reviewer responsibility, [audit F6](audit/2026-04-16.md)
 
 See [`validator.md`](validator.md) for how to run and extend it.
 
