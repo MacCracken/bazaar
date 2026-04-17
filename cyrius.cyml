@@ -14,4 +14,14 @@ entry = "scripts/validate_recipes.cyr"
 output = "build/bazaar-validate"
 
 [deps]
-stdlib = ["string", "fmt", "alloc", "vec", "str", "io", "syscalls", "fs", "toml"]
+stdlib = ["string", "fmt", "alloc", "vec", "str", "io", "syscalls", "fs", "toml", "hashmap"]
+
+# Zugot publishes dist/zugot.cyr — a generated index of every package name
+# in the canonical recipe set. Bazaar's validator cross-checks every recipe
+# dep against this at build time so PRs with unresolved deps fail CI.
+# See docs/adr/005-bazaar-on-zugot.md for the trust relationship.
+[deps.zugot]
+git = "https://github.com/MacCracken/zugot.git"
+path = "../zugot"
+branch = "main"
+modules = ["dist/zugot.cyr"]

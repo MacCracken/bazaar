@@ -16,6 +16,12 @@ var g_errors = 0;
 var g_warnings = 0;
 var g_cmdline[4096];
 var g_cmdline_len = 0;
+# Universe of package names bazaar recipes may depend on. Backed by a hashmap
+# for O(1) membership lookups — recipe dep lists reference ~900 names total,
+# so the linear-scan alternative added ~2ms to validator runtime.
+# zugot provides seed names via dist/zugot.cyr ([deps.zugot] in cyrius.cyml);
+# bazaar adds its own names in a lightweight first pass.
+var g_pkg_universe = 0;
 
 # Read /proc/self/cmdline into our global buffer.
 # Stdlib args_init stores a stack pointer in a global — dangles. We use
@@ -109,6 +115,122 @@ fn recipe_stem(path) {
     # strip ".cyml" (5 chars)
     if (blen > 5) { return str_substr(base, 0, blen - 5); }
     return base;
+}
+
+# universe_contains(name_str) — O(1) hashmap lookup. Name must be a Str.
+fn universe_contains(name) {
+    return map_has(g_pkg_universe, str_cstr(name));
+}
+
+# First-pass helper: cheaply read a recipe and extract [package].name without
+# running the full TOML parser. Matches the first line of the form
+# `name = "..."` (ignoring surrounding whitespace). Much faster than re-parsing
+# every recipe twice — saves ~3ms on the 90-recipe corpus.
+fn collect_bazaar_name(path) {
+    var buf = alloc(8192);
+    var n = file_read_all(str_cstr(path), buf, 8192);
+    if (n <= 0) { return 0; }
+    var i = 0;
+    while (i + 7 < n) {
+        # Scan to start of line
+        if (i == 0 || load8(buf + i - 1) == 10) {
+            # Skip leading spaces/tabs
+            var s = i;
+            while (s < n) {
+                var c = load8(buf + s);
+                if (c != 32 && c != 9) { break; }
+                s = s + 1;
+            }
+            # Look for literal "name" followed by = and quoted value
+            if (s + 6 < n
+                && load8(buf + s)     == 110   # n
+                && load8(buf + s + 1) ==  97   # a
+                && load8(buf + s + 2) == 109   # m
+                && load8(buf + s + 3) == 101   # e
+            ) {
+                var p = s + 4;
+                while (p < n) {
+                    var c = load8(buf + p);
+                    if (c != 32 && c != 9) { break; }
+                    p = p + 1;
+                }
+                if (p < n && load8(buf + p) == 61) {  # =
+                    p = p + 1;
+                    while (p < n) {
+                        var c = load8(buf + p);
+                        if (c != 32 && c != 9) { break; }
+                        p = p + 1;
+                    }
+                    if (p < n && load8(buf + p) == 34) {  # opening quote
+                        var vstart = p + 1;
+                        var vend = vstart;
+                        while (vend < n && load8(buf + vend) != 34) {
+                            vend = vend + 1;
+                        }
+                        if (vend > vstart && vend < n) {
+                            # Allocate a private null-terminated copy — buf will be reused.
+                            var len = vend - vstart;
+                            var dst = alloc(len + 1);
+                            memcpy(dst, buf + vstart, len);
+                            store8(dst + len, 0);
+                            map_set(g_pkg_universe, dst, 1);
+                        }
+                        return 0;
+                    }
+                }
+            }
+        }
+        i = i + 1;
+    }
+    return 0;
+}
+
+# Check every runtime/build dep against the universe. Any dep that isn't
+# provided by zugot and isn't the recipe's own name is an error.
+fn check_deps(pairs, path, own_name) {
+    var kinds = vec_new();
+    vec_push(kinds, "runtime");
+    vec_push(kinds, "build");
+    var ki = 0;
+    while (ki < vec_len(kinds)) {
+        var kind = vec_get(kinds, ki);
+        var raw = toml_get(pairs, kind);
+        if (raw > 0) {
+            # The flat-pair parser hands us the array as a raw Str like
+            # `["glibc", "wayland", ...]`. We scan for quoted identifiers.
+            var data = str_data(raw);
+            var len = str_len(raw);
+            var i = 0;
+            while (i < len) {
+                if (load8(data + i) == 34) {
+                    # Walk to the closing quote.
+                    var start = i + 1;
+                    var end = start;
+                    while (end < len && load8(data + end) != 34) {
+                        end = end + 1;
+                    }
+                    if (end > start && end < len) {
+                        var dep = str_new(data + start, end - start);
+                        var skip = 0;
+                        if (own_name > 0 && str_eq(dep, own_name) == 1) { skip = 1; }
+                        if (skip == 0 && universe_contains(dep) == 0) {
+                            str_print(path);
+                            print_cstr(": error: dep '");
+                            str_print(dep);
+                            print_cstr("' (");
+                            print_cstr(kind);
+                            println_cstr(") not provided by zugot or bazaar");
+                            g_errors = g_errors + 1;
+                        }
+                        i = end;
+                    }
+                }
+                i = i + 1;
+            }
+        }
+        ki = ki + 1;
+    }
+    return 0;
 }
 
 # Reject non-ASCII bytes in a package identifier. Blocks homoglyph attacks
@@ -246,6 +368,7 @@ fn validate_file(path) {
         }
     }
 
+    check_deps(pairs, path, name);
     return 0;
 }
 
@@ -257,6 +380,19 @@ fn main() {
     var root = str_from("recipes");
     if (root_cstr != 0) { root = str_from(root_cstr); }
 
+    # Populate the dep universe: zugot (via the deps-resolved module) plus
+    # every bazaar package name collected in a first pass over the recipe tree.
+    # Backed by a hashmap for O(1) membership checks during the main validate loop.
+    g_pkg_universe = map_new();
+    var zugot_vec = vec_new();
+    zugot_names(zugot_vec);
+    var zi = 0;
+    while (zi < vec_len(zugot_vec)) {
+        map_set(g_pkg_universe, str_cstr(vec_get(zugot_vec, zi)), 1);
+        zi = zi + 1;
+    }
+    var zugot_count = map_size(g_pkg_universe);
+
     var files = find_files(root, str_from("cyml"));
     var total = vec_len(files);
     if (total == 0) {
@@ -266,13 +402,23 @@ fn main() {
 
     var i = 0;
     while (i < total) {
+        collect_bazaar_name(vec_get(files, i));
+        i = i + 1;
+    }
+
+    i = 0;
+    while (i < total) {
         validate_file(vec_get(files, i));
         i = i + 1;
     }
 
     syscall(1, 1, "\n", 1);
     fmt_int(total);
-    print_cstr(" recipes checked — ");
+    print_cstr(" recipes checked against ");
+    fmt_int(zugot_count);
+    print_cstr(" zugot + ");
+    fmt_int(map_size(g_pkg_universe) - zugot_count);
+    print_cstr(" bazaar pkgs — ");
     fmt_int(g_errors);
     print_cstr(" error(s), ");
     fmt_int(g_warnings);

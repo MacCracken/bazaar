@@ -58,6 +58,7 @@ run_case  pkgbase_mismatch      1   1   0
 run_case  non_ascii_name        1   1   0
 run_case  http_url              1   1   0
 run_case  shell_metachar_version  0  0  2
+run_case  unresolved_dep        1   1   0
 
 echo
 echo "$pass passed, $fail failed"

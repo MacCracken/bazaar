@@ -18,7 +18,7 @@ sha256 = ""
 patches = []
 
 [depends]
-runtime = ["glibc", "gtk3", "glib", "glibmm", "cairomm", "pangomm", "atkmm", "libsigc++"]
+runtime = ["glibc", "gtk3", "glib", "glibmm", "cairomm", "pangomm", "atkmm", "libsigcpp"]
 build = ["meson", "ninja", "pkgconf", "mm-common"]
 optional = []
 

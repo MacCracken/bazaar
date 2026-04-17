@@ -35,6 +35,7 @@ benches/run.sh --check
 | `sha256` is empty | warning | Grace period during drafting. Reviewer requires real digest before merge. |
 | Version appears in source URL | warning | Helps catch mismatched version bumps. |
 | `version` has no shell metacharacters | warning | Guards against command injection if interpolated into `[build]` — see audit F5. |
+| Every `[depends]` entry resolves against `zugot ∪ bazaar` | error | Cross-check runs against the hashmap populated at startup from `zugot_names()` (imported via `[deps.zugot]`) plus names collected from bazaar's own recipes. See [ADR-006](adr/006-zugot-as-cyrius-dep.md). |
 
 Exit code: `0` clean, `1` any errors, `2` I/O or usage error.
 

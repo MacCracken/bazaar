@@ -72,6 +72,7 @@ CI runs all of the above on every PR. See [`.github/workflows/validate-recipes.y
   - [003 — `pkgbase` for filename / name divergence](docs/adr/003-pkgbase-for-filename-divergence.md)
   - [004 — POSIX `sh` for CI scripts](docs/adr/004-posix-sh-for-ci-scripts.md)
   - [005 — Bazaar sits on top of zugot](docs/adr/005-bazaar-on-zugot.md)
+  - [006 — Zugot as a Cyrius `[deps]` dependency](docs/adr/006-zugot-as-cyrius-dep.md)
 - **[Security audits](docs/audit/)** — periodic threat-model review:
   - [2026-04-16](docs/audit/2026-04-16.md) — external CVE/attack-class mapping, 11 findings, 6 fixed in-session
 

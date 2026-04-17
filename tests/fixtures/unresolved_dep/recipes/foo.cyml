@@ -1,0 +1,21 @@
+# Unresolved dep: depends on "nonesuch-pkg-xyz" which exists nowhere in the
+# zugot ∪ bazaar universe. Cross-check should error.
+
+[package]
+name = "foo"
+version = "1.0.0"
+description = "unresolved-dep fixture"
+license = "MIT"
+groups = ["tools"]
+
+[source]
+url = "https://example.org/foo-1.0.0.tar.gz"
+sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+
+[depends]
+runtime = ["glibc", "nonesuch-pkg-xyz"]
+build = ["gcc"]
+
+[build]
+make = "make"
+install = "make install"
