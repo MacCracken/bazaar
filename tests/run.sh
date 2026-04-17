@@ -55,6 +55,9 @@ run_case  missing_source_key    1   2   0
 run_case  empty                 1   1   0
 run_case  pkgbase_ok            0   0   0
 run_case  pkgbase_mismatch      1   1   0
+run_case  non_ascii_name        1   1   0
+run_case  http_url              1   1   0
+run_case  shell_metachar_version  0  0  2
 
 echo
 echo "$pass passed, $fail failed"

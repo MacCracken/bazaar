@@ -111,6 +111,61 @@ fn recipe_stem(path) {
     return base;
 }
 
+# Reject non-ASCII bytes in a package identifier. Blocks homoglyph attacks
+# where a visually-identical Cyrillic/Greek character produces a name that
+# visually matches an existing package but resolves differently at install time.
+# Allowed: 0x20-0x7E (printable ASCII). In practice package names are much
+# narrower (letters, digits, -, _, ., +), but we only fail on non-ASCII here;
+# reviewers catch format violations within ASCII.
+fn has_non_ascii(s) {
+    var data = str_data(s);
+    var len = str_len(s);
+    var i = 0;
+    while (i < len) {
+        var c = load8(data + i);
+        if (c < 32 || c > 126) { return 1; }
+        i = i + 1;
+    }
+    return 0;
+}
+
+# Detect shell metacharacters that would allow command injection if the value
+# is interpolated into a `[build]` shell string without quoting. Returns 1 if
+# the version looks dangerous.
+fn version_has_shell_metachar(s) {
+    var data = str_data(s);
+    var len = str_len(s);
+    if (len == 0) { return 0; }
+    # Leading '-' can be misread as a flag by a build command.
+    if (load8(data) == 45) { return 1; }
+    var i = 0;
+    while (i < len) {
+        var c = load8(data + i);
+        # ; & | $ ` ' " \ newline carriage-return
+        if (c == 59 || c == 38 || c == 124) { return 1; }
+        if (c == 36 || c == 96) { return 1; }
+        if (c == 39 || c == 34 || c == 92) { return 1; }
+        if (c == 10 || c == 13) { return 1; }
+        i = i + 1;
+    }
+    return 0;
+}
+
+# url_is_https(s) returns 1 if s starts with the literal "https://".
+fn url_is_https(s) {
+    if (str_len(s) < 8) { return 0; }
+    var data = str_data(s);
+    if (load8(data)     != 104) { return 0; }  # h
+    if (load8(data + 1) != 116) { return 0; }  # t
+    if (load8(data + 2) != 116) { return 0; }  # t
+    if (load8(data + 3) != 112) { return 0; }  # p
+    if (load8(data + 4) != 115) { return 0; }  # s
+    if (load8(data + 5) !=  58) { return 0; }  # :
+    if (load8(data + 6) !=  47) { return 0; }  # /
+    if (load8(data + 7) !=  47) { return 0; }  # /
+    return 1;
+}
+
 fn validate_file(path) {
     var sections = toml_parse_file(str_cstr(path));
     if (vec_len(sections) == 0) {
@@ -138,6 +193,13 @@ fn validate_file(path) {
     var name = toml_get(pairs, "name");
     var pkgbase = toml_get(pairs, "pkgbase");
     if (name > 0) {
+        # Block homoglyph attacks — see docs/audit/2026-04-16.md F3.
+        if (has_non_ascii(name) == 1) {
+            report_error(path, "[package].name contains non-ASCII bytes (homoglyph risk)");
+        }
+        if (pkgbase > 0 && has_non_ascii(pkgbase) == 1) {
+            report_error(path, "[package].pkgbase contains non-ASCII bytes (homoglyph risk)");
+        }
         var stem = recipe_stem(path);
         var expected = name;
         var expected_label = "package name";
@@ -160,6 +222,14 @@ fn validate_file(path) {
 
     var version = toml_get(pairs, "version");
     var url = toml_get(pairs, "url");
+    # Shell-metachar check on version — see docs/audit/2026-04-16.md F5.
+    if (version > 0 && version_has_shell_metachar(version) == 1) {
+        report_warn(path, "version contains shell metacharacters or leading '-' — command-injection risk if interpolated into [build]");
+    }
+    # HTTPS-only URL enforcement — see docs/audit/2026-04-16.md F4.
+    if (url > 0 && str_len(url) > 0 && url_is_https(url) == 0) {
+        report_error(path, "[source].url must use https:// scheme");
+    }
     if (version > 0 && url > 0 && str_len(version) > 0) {
         if (str_contains(url, version) == 0) {
             report_warn(path, "version string not found in source url");

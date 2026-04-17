@@ -29,9 +29,12 @@ benches/run.sh --check
 | File parses as TOML/CYML | error | Empty files fail here. |
 | Required keys present | error | `name`, `version`, `description`, `license`, `groups`, `url`, `sha256`, `runtime`, `make`, `install`. |
 | Filename stem matches `[package].name` (or `pkgbase` if set) | error | Catches typos and copy-paste mistakes. |
+| `[package].name` / `pkgbase` is ASCII-only | error | Blocks homoglyph attacks — see [`audit/2026-04-16.md`](audit/2026-04-16.md) F3. |
+| `[source].url` uses `https://` scheme | error | No HTTP, FTP, file://, git+ssh:// — see audit F4. |
 | `sha256` is 64-char hex | error | Must be a real digest. |
 | `sha256` is empty | warning | Grace period during drafting. Reviewer requires real digest before merge. |
 | Version appears in source URL | warning | Helps catch mismatched version bumps. |
+| `version` has no shell metacharacters | warning | Guards against command injection if interpolated into `[build]` — see audit F5. |
 
 Exit code: `0` clean, `1` any errors, `2` I/O or usage error.
 

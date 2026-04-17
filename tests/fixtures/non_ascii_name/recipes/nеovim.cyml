@@ -1,0 +1,21 @@
+# Homoglyph attack: "nеovim" uses Cyrillic е (U+0435) in place of Latin e.
+# Filename stem appears to match a legitimate package but resolves differently.
+
+[package]
+name = "nеovim"
+version = "1.0.0"
+description = "homoglyph fixture — Cyrillic e in name should be rejected"
+license = "MIT"
+groups = ["tools"]
+
+[source]
+url = "https://example.org/foo-1.0.0.tar.gz"
+sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+
+[depends]
+runtime = ["glibc"]
+build = ["gcc"]
+
+[build]
+make = "make"
+install = "make install"

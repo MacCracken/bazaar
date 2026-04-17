@@ -12,13 +12,20 @@ on:
   push:
     branches: [main]
 
+# Least-privilege token. See docs/audit/2026-04-16.md F2.
+permissions:
+  contents: read
+
 jobs:
   validate:
     runs-on: ubuntu-latest
     env:
       CYRIUS_VERSION: "5.2.0"
     steps:
-      - uses: actions/checkout@v4
+      # Pinned to commit SHA to defend against tag retargeting
+      # (see docs/audit/2026-04-16.md F1 — CVE-2025-30066 tj-actions incident).
+      # Bump the SHA AND the comment together when updating actions/checkout.
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
 
       - name: Install Cyrius toolchain
         run: |
@@ -63,10 +70,14 @@ jobs:
             echo "No benchmarks found, skipping"
           fi
 
+      # GitHub context values are passed through env, not interpolated directly
+      # into the shell script. See docs/audit/2026-04-16.md F8.
       - name: Check GPG signatures (advisory)
         if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
         run: |
-          for sha in $(git log --format=%H origin/${{ github.base_ref }}..HEAD); do
+          for sha in $(git log --format=%H "origin/${BASE_REF}..HEAD"); do
             if ! git verify-commit "$sha" 2>/dev/null; then
               echo "::warning::Commit $sha is not GPG-signed"
             fi
