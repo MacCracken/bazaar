@@ -51,7 +51,7 @@ ark bazaar submit recipes/editors/neovim.cyml
 # Resolve deps (pulls zugot dist module via [deps.zugot])
 cyrius deps
 
-# Build the validator (requires cyrius 5.2.0+)
+# Build the validator (requires cyrius 5.7.30+)
 cyrius build scripts/validate_recipes.cyr build/bazaar-validate
 
 # Validate all recipes (includes cross-check against zugot ∪ bazaar names)

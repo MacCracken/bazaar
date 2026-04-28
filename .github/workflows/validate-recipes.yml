@@ -8,6 +8,7 @@ on:
       - 'tests/**'
       - 'benches/**'
       - 'cyrius.cyml'
+      - 'VERSION'
       - '.github/workflows/validate-recipes.yml'
   push:
     branches: [main]
@@ -21,8 +22,6 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    env:
-      CYRIUS_VERSION: "5.2.0"
     steps:
       # Pinned to commit SHA to defend against tag retargeting
       # (see docs/audit/2026-04-16.md F1 — CVE-2025-30066 tj-actions incident).
@@ -30,15 +29,41 @@ jobs:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
 
       - name: Install Cyrius toolchain
+        # Read the pinned version from cyrius.cyml so the manifest is the
+        # single source of truth (matches nous CI). Tarball install closes
+        # docs/audit/2026-04-16.md F9 — no piping a fetched install.sh into sh.
         run: |
-          curl -sSfL https://raw.githubusercontent.com/MacCracken/cyrius/main/scripts/install.sh | sh
+          CYRIUS_VERSION=$(grep -oP '(?<=^cyrius = ")[^"]+' cyrius.cyml)
+          echo "Installing Cyrius $CYRIUS_VERSION"
+          curl -sLO "https://github.com/MacCracken/cyrius/releases/download/$CYRIUS_VERSION/cyrius-$CYRIUS_VERSION-x86_64-linux.tar.gz"
+          tar xzf "cyrius-$CYRIUS_VERSION-x86_64-linux.tar.gz"
+          CYRIUS_DIR="cyrius-$CYRIUS_VERSION-x86_64-linux"
+          mkdir -p "$HOME/.cyrius/bin" "$HOME/.cyrius/lib"
+          cp "$CYRIUS_DIR/bin/"* "$HOME/.cyrius/bin/" 2>/dev/null || true
+          cp -r "$CYRIUS_DIR/lib/"* "$HOME/.cyrius/lib/" 2>/dev/null || true
+          chmod +x "$HOME/.cyrius/bin/"* 2>/dev/null || true
           echo "$HOME/.cyrius/bin" >> $GITHUB_PATH
+          echo "CYRIUS_HOME=$HOME/.cyrius" >> $GITHUB_ENV
+          rm -f "cyrius-$CYRIUS_VERSION-x86_64-linux.tar.gz"
 
       - name: Verify toolchain
-        run: cc5 --version
+        run: cyrius --version
 
-      - name: Resolve dependencies
-        run: cyrius deps
+      - name: Resolve dependencies (verify against lockfile)
+        # cyrius.lock pins the zugot dist-module hash. --verify fails if the
+        # resolved module's hash differs from the lock — catches upstream
+        # tampering or an out-of-date lockfile after a zugot tag bump.
+        run: cyrius deps --verify
+
+      - name: Lint validator (advisory)
+        # Currently advisory — validator carries one historical line-length
+        # warning that predates the 5.7.30 toolchain bump. Promote to
+        # fail-on-warn after a dedicated `cyrius fmt` sweep.
+        continue-on-error: true
+        run: cyrius lint scripts/validate_recipes.cyr
+
+      - name: Vet
+        run: cyrius vet scripts/validate_recipes.cyr
 
       - name: Build validator
         run: |
@@ -49,28 +74,10 @@ jobs:
         run: ./build/bazaar-validate
 
       - name: Run validator tests
-        run: |
-          if [ -f tests/run.sh ]; then
-            sh tests/run.sh
-          elif ls tests/tcyr/*.tcyr >/dev/null 2>&1; then
-            for t in tests/tcyr/*.tcyr; do
-              name=$(basename "$t" .tcyr)
-              echo "=== $name ==="
-              cyrius build "$t" "/tmp/ci_$name"
-              "/tmp/ci_$name"
-              rm -f "/tmp/ci_$name"
-            done
-          else
-            echo "No tests found, skipping"
-          fi
+        run: sh tests/run.sh
 
       - name: Benchmark validator (regression check)
-        run: |
-          if [ -f benches/run.sh ]; then
-            sh benches/run.sh --check
-          else
-            echo "No benchmarks found, skipping"
-          fi
+        run: sh benches/run.sh --check
 
       # GitHub context values are passed through env, not interpolated directly
       # into the shell script. See docs/audit/2026-04-16.md F8.

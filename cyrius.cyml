@@ -5,11 +5,13 @@
 name = "bazaar"
 # Versioned in lockstep with zugot — each bazaar release is validated against
 # a specific zugot tag (see [deps.zugot]), so they share the same version.
-version = "1.0.0"
+# Pulled from the VERSION file so cyrius.cyml and VERSION can never drift.
+version = "${file:VERSION}"
 description = "Bazaar — community recipe repository for AGNOS"
 license = "GPL-3.0-only"
+repository = "https://github.com/MacCracken/bazaar"
 language = "cyrius"
-cyrius = "5.2.0"
+cyrius = "5.7.30"
 
 [build]
 entry = "scripts/validate_recipes.cyr"
@@ -21,7 +23,7 @@ stdlib = ["string", "fmt", "alloc", "vec", "str", "io", "syscalls", "fs", "toml"
 # Zugot publishes dist/zugot.cyr — a generated index of every package name
 # in the canonical recipe set. Bazaar's validator cross-checks every recipe
 # dep against this at build time so PRs with unresolved deps fail CI.
-# See docs/adr/005-bazaar-on-zugot.md for the trust relationship.
+# See docs/adr/006-zugot-as-cyrius-dep.md for the trust relationship.
 [deps.zugot]
 git = "https://github.com/MacCracken/zugot.git"
 path = "../zugot"

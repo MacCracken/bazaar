@@ -17,7 +17,7 @@ Rewrite the validator in Cyrius as `scripts/validate_recipes.cyr`. Drop the Pyth
 
 ## Consequences
 
-- CI installs Cyrius 5.2.0 on every run via `curl … | sh`. Single network dependency, pinned version.
+- CI installs Cyrius 5.7.30 on every run from the published release tarball, pinned by `cyrius = "..."` in `cyrius.cyml`. Single network dependency.
 - Recipe parsing is limited to what stdlib `lib/toml.cyr` handles — currently only flat-pair mode, not section-aware. Validator checks required keys but can't enforce section membership (e.g. "sha256 must be in `[source]`"). Sufficient for the schema as-is.
 - CYML-authoring errors surface to contributors in Cyrius error messages rather than Python stack traces, which is fine but unfamiliar.
 - Writing the first Cyrius-native tool for this repo creates a template for future tooling (dep cross-check, recipe generator, etc.).
@@ -32,4 +32,4 @@ Rewrite the validator in Cyrius as `scripts/validate_recipes.cyr`. Drop the Pyth
 
 - `scripts/validate_recipes.cyr` — the validator
 - `bench-history.csv` — recorded timings
-- Cyrius 5.2.0 `lib/toml.cyr`, `lib/fs.cyr`, `lib/args.cyr`
+- Cyrius 5.7.30 `lib/toml.cyr`, `lib/fs.cyr`, `lib/args.cyr`

@@ -2,7 +2,9 @@ name: Release
 
 on:
   push:
-    tags: ['[0-9]*']
+    # Strict semver shape — version-verify step also matches against VERSION.
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
 
 permissions:
   contents: write
@@ -33,7 +35,7 @@ jobs:
           # against a stale zugot dist.
           ZUGOT_TAG=$(awk -F'"' '/^tag\s*=/ && seen {print $2; exit} /^\[deps\.zugot\]/ {seen=1}' cyrius.cyml)
           [ "$ZUGOT_TAG" = "$TAG" ] || { echo "bazaar tag ($TAG) != [deps.zugot].tag ($ZUGOT_TAG) — release would ship desynced from zugot"; exit 1; }
-          echo "verified: VERSION=$FILE_VERSION, tag=$TAG, zugot=$ZUGOT_TAG"
+          echo "verified: VERSION=$FILE_VERSION, tag=$TAG, zugot=$ZUGOT_TAG (cyrius.cyml pulls package.version via \${file:VERSION})"
 
       - name: Archive
         env:
