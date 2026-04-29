@@ -49,7 +49,7 @@ stdlib = ["string", "fmt", "alloc", "vec", "str", "io", "syscalls", "fs", "toml"
 
 [deps.zugot]
 git    = "https://github.com/MacCracken/zugot.git"
-tag    = "1.0.0"
+tag    = "1.0.1"
 modules = ["dist/zugot.cyr"]
 ```
 

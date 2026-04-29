@@ -6,14 +6,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-04-28
+
+Lockstep release with zugot 1.0.1 — `[deps.zugot].tag` bumped accordingly. `dist/zugot.cyr` is byte-identical between zugot 1.0.0 and 1.0.1, so `cyrius.lock` is unchanged from 1.0.0.
+
 ### Changed
 
 - **Cyrius toolchain bumped to 5.7.30** in `cyrius.cyml` (was 5.2.0). Validator builds and validates the full 90-recipe corpus with 0 errors; all 13 fixture tests pass; bench within 2× baseline.
+- **`[deps.zugot].tag` bumped to 1.0.1** to track zugot's latest release (lockstep guard in `release.yml` enforces this on tag push).
 - **`cyrius.cyml` modernized**: `package.version` now pulled from `VERSION` via `${file:VERSION}` (matches nous/daimon), so the manifest and `VERSION` file can never drift. Added `repository` field.
 - **CI install path is now a versioned tarball** (`cyrius-<v>-x86_64-linux.tar.gz`) instead of `curl … install.sh | sh` — closes [audit/2026-04-16.md](docs/audit/2026-04-16.md) F9 surface. Toolchain version is read from `cyrius.cyml` so the manifest is the single source of truth.
 - **`validate-recipes.yml`** picks up daimon-style ergonomics: `concurrency:` group, graceful `cyrius deps --verify` (only when `cyrius.lock` is present), `${CYRIUS_VERSION:-…}` env override, parallel docs-check job (CHANGELOG / required files / version-in-CHANGELOG enforcement), `cyrius lint` + `cyrius vet` stages.
 - **`release.yml`** ships `cyrius.lock` as a release artifact for build-reproducibility, and extracts release notes from `CHANGELOG.md` instead of GitHub's auto-generated PR list.
 - **Validator line-length lint** cleared by shortening one warning string. CI lint step is now fail-on-warn (was advisory).
+
+### Added
+
+- **`CHANGELOG.md`** (this file). Required by the docs job in `validate-recipes.yml`; release notes are extracted from the `## [X.Y.Z]` section matching the tag.
+- **`LICENSE`** — pointer file for `GPL-3.0-only`. Was missing despite `cyrius.cyml` declaring the license; the new docs check surfaced it.
 
 ### Documentation
 
