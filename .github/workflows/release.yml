@@ -3,6 +3,9 @@ name: Release
 on:
   push:
     # Strict semver shape — version-verify step also matches against VERSION.
+    # No leading-`v` tags: bazaar's lockstep guard against [deps.zugot].tag
+    # is bare-semver, and zugot itself tags bare. Matching keeps the awk
+    # comparison in "Verify version" trivial.
     tags:
       - '[0-9]+.[0-9]+.[0-9]+'
 
@@ -14,8 +17,8 @@ jobs:
     name: CI Gate
     uses: ./.github/workflows/validate-recipes.yml
 
-  release:
-    name: Create Release
+  build:
+    name: Build Release Artifacts
     needs: [ci]
     runs-on: ubuntu-latest
     steps:
@@ -35,14 +38,58 @@ jobs:
           # against a stale zugot dist.
           ZUGOT_TAG=$(awk -F'"' '/^tag\s*=/ && seen {print $2; exit} /^\[deps\.zugot\]/ {seen=1}' cyrius.cyml)
           [ "$ZUGOT_TAG" = "$TAG" ] || { echo "bazaar tag ($TAG) != [deps.zugot].tag ($ZUGOT_TAG) — release would ship desynced from zugot"; exit 1; }
-          echo "verified: VERSION=$FILE_VERSION, tag=$TAG, zugot=$ZUGOT_TAG (cyrius.cyml pulls package.version via \${file:VERSION})"
+          # Sanity: the tag must have a corresponding CHANGELOG section so
+          # release notes extraction below produces non-empty body. Guards
+          # against the docs job passing on a different VERSION value than
+          # what's being tagged.
+          grep -q "^## \[$TAG\]" CHANGELOG.md || {
+            echo "FAIL: no '## [$TAG]' section in CHANGELOG.md"; exit 1; }
+          echo "verified: VERSION=$FILE_VERSION, tag=$TAG, zugot=$ZUGOT_TAG, changelog=ok"
 
       - name: Archive
         env:
           TAG: ${{ github.ref_name }}
         run: |
           git archive --format=tar.gz --prefix="bazaar-${TAG}/" -o "bazaar-${TAG}-src.tar.gz" HEAD
-          sha256sum bazaar-*.tar.gz > SHA256SUMS
+          # Ship cyrius.lock alongside the source tarball so consumers can
+          # reproduce the same dep resolution we validated in CI. Matches
+          # daimon's release-artifact set.
+          cp cyrius.lock "bazaar-${TAG}-cyrius.lock"
+          sha256sum bazaar-*.tar.gz bazaar-*.lock > SHA256SUMS
+
+      - name: Extract changelog
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          awk "/^## \\[${TAG}\\]/{found=1; next} /^## \\[/{if(found) exit} found{print}" \
+            CHANGELOG.md > /tmp/body.md
+          if [ ! -s /tmp/body.md ]; then
+            echo "FAIL: changelog section for $TAG is empty"; exit 1
+          fi
+          echo "--- release notes ---"
+          cat /tmp/body.md
+
+      - name: Stage release notes
+        run: cp /tmp/body.md RELEASE_NOTES.md
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-artifacts
+          path: |
+            bazaar-*.tar.gz
+            bazaar-*.lock
+            SHA256SUMS
+            RELEASE_NOTES.md
+
+  release:
+    name: Create GitHub Release
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-artifacts
 
       # Third-party action — SHA-pinned (higher risk than first-party actions/*,
       # step runs with `contents: write` and access to GITHUB_TOKEN).
@@ -50,8 +97,9 @@ jobs:
       - uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65  # v2
         with:
           name: "Bazaar ${{ github.ref_name }}"
-          generate_release_notes: true
+          body_path: RELEASE_NOTES.md
           prerelease: ${{ startsWith(github.ref_name, '0.') }}
           files: |
             bazaar-*.tar.gz
+            bazaar-*.lock
             SHA256SUMS

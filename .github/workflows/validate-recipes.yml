@@ -8,7 +8,9 @@ on:
       - 'tests/**'
       - 'benches/**'
       - 'cyrius.cyml'
+      - 'cyrius.lock'
       - 'VERSION'
+      - 'CHANGELOG.md'
       - '.github/workflows/validate-recipes.yml'
   push:
     branches: [main]
@@ -19,8 +21,14 @@ on:
 permissions:
   contents: read
 
+# Cancel superseded runs on the same ref so CI doesn't backlog a noisy PR.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   validate:
+    name: Validate
     runs-on: ubuntu-latest
     steps:
       # Pinned to commit SHA to defend against tag retargeting
@@ -30,10 +38,12 @@ jobs:
 
       - name: Install Cyrius toolchain
         # Read the pinned version from cyrius.cyml so the manifest is the
-        # single source of truth (matches nous CI). Tarball install closes
-        # docs/audit/2026-04-16.md F9 — no piping a fetched install.sh into sh.
+        # single source of truth (matches nous/daimon CI). Tarball install
+        # closes docs/audit/2026-04-16.md F9 — no piping a fetched
+        # install.sh into sh. The CYRIUS_VERSION env override lets a workflow
+        # re-run test a different toolchain without editing the manifest.
         run: |
-          CYRIUS_VERSION=$(grep -oP '(?<=^cyrius = ")[^"]+' cyrius.cyml)
+          CYRIUS_VERSION="${CYRIUS_VERSION:-$(grep -oP '(?<=^cyrius = ")[^"]+' cyrius.cyml)}"
           echo "Installing Cyrius $CYRIUS_VERSION"
           curl -sLO "https://github.com/MacCracken/cyrius/releases/download/$CYRIUS_VERSION/cyrius-$CYRIUS_VERSION-x86_64-linux.tar.gz"
           tar xzf "cyrius-$CYRIUS_VERSION-x86_64-linux.tar.gz"
@@ -49,15 +59,23 @@ jobs:
       - name: Verify toolchain
         run: cyrius --version
 
-      - name: Resolve dependencies (verify against lockfile)
+      - name: Resolve dependencies
+        run: cyrius deps
+
+      - name: Verify dep hashes
         # cyrius.lock pins the zugot dist-module hash. --verify fails if the
         # resolved module's hash differs from the lock — catches upstream
         # tampering or an out-of-date lockfile after a zugot tag bump.
-        run: cyrius deps --verify
+        # Skipped on the first push that introduces a new dep before
+        # cyrius.lock is generated and committed (matches daimon's pattern).
+        run: |
+          if [ -f cyrius.lock ]; then
+            cyrius deps --verify
+          else
+            echo "::warning::cyrius.lock not committed — skipping hash verification"
+          fi
 
       - name: Lint validator
-        # Fail on any "  warn " line. Validator is a single source file so
-        # no barrel-include / multi-entry handling like nous needs.
         run: |
           out=$(cyrius lint scripts/validate_recipes.cyr 2>&1)
           echo "$out"
@@ -73,6 +91,10 @@ jobs:
         run: |
           mkdir -p build
           cyrius build scripts/validate_recipes.cyr build/bazaar-validate
+          echo "bazaar-validate: $(wc -c < build/bazaar-validate) bytes"
+
+      - name: Verify ELF
+        run: xxd -l 4 build/bazaar-validate | grep -q "7f45 4c46"
 
       - name: Validate recipes
         run: ./build/bazaar-validate
@@ -95,3 +117,35 @@ jobs:
               echo "::warning::Commit $sha is not GPG-signed"
             fi
           done
+
+  docs:
+    name: Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+
+      - name: Check required files
+        # Required for a tag-cuttable release. cyrius.lock is required so
+        # validate-recipes.yml's --verify step is load-bearing on every PR
+        # (prevents a silent regression where a missing lockfile causes
+        # the verify to be skipped indefinitely).
+        run: |
+          MISSING=0
+          for f in README.md CHANGELOG.md VERSION LICENSE \
+                   MAINTAINERS.yaml cyrius.cyml cyrius.lock \
+                   docs/contributing.md docs/recipe-format.md docs/validator.md; do
+            if [ -f "$f" ]; then echo "  OK: $f"
+            else echo "  MISSING: $f"; MISSING=1; fi
+          done
+          exit $MISSING
+
+      - name: Verify version consistency
+        # cyrius.cyml pulls package.version from VERSION via ${file:VERSION};
+        # this checks that the same version appears in CHANGELOG so release
+        # notes can be extracted automatically.
+        run: |
+          VERSION=$(cat VERSION | tr -d '[:space:]')
+          echo "VERSION file: $VERSION"
+          grep -q "^## \[$VERSION\]" CHANGELOG.md || {
+            echo "FAIL: no '## [$VERSION]' section in CHANGELOG.md"; exit 1; }
+          echo "Version consistent (cyrius.cyml pulls VERSION via \${file:VERSION})"
