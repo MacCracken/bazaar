@@ -57,7 +57,7 @@ modules = ["dist/zugot.cyr"]
 
 The program flow:
 
-1. `alloc_init()` + custom cmdline reader (stdlib `args_init` has a stack-dangle bug in 5.1.10, fixed locally)
+1. `alloc_init()` + custom cmdline reader (stdlib `args_init` stores a pointer to a function-local buffer in a global — still present in 5.7.30, worked around with a global buffer here)
 2. Build the package-name universe: seed from `zugot_names()`, then first-pass scan over `recipes/` collecting every bazaar `[package].name`
 3. `find_files(root, "cyml")` — walks the tree via `getdents64`
 4. Second pass: for each file, `toml_parse_file()` → check required keys → filename match → sha256 format → https URL → shell-metachar version → cross-check every `[depends]` entry against the universe
@@ -119,7 +119,7 @@ The workflow exposes a `workflow_call:` trigger so `release.yml` can gate tagged
 
 ## Known rough edges
 
-- **Cyrius 5.1.10 `lib/args.cyr` stack-dangle** — validator includes an inline replacement reader. Remove when stdlib is fixed upstream.
+- **stdlib `lib/args.cyr` stack-dangle** — `args_init()` stores `&buf` from a function-local array into a global; bytes are clobbered after return. Still present in 5.7.30. Validator includes an inline replacement reader using a global buffer. Remove when stdlib is fixed upstream.
 - **Cyrius stdlib `toml` parser flattens sections** — the validator can check required keys exist but not enforce section membership. Switch to nous' `cyml_parse` when it lands in stdlib.
 - **Filename/name mismatch error doesn't suggest `pkgbase`** — just says the stems don't match. If a contributor hits this legitimately (parallel version), they have to find [ADR-003](adr/003-pkgbase-for-filename-divergence.md) themselves.
 - **Empty `sha256` is a warning, not an error** — intentional drafting grace period. A `--strict` mode that errors on this, toggled on for merge-targeting PRs, is tracked in [audit F7](audit/2026-04-16.md).

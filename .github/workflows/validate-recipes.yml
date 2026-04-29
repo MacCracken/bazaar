@@ -55,12 +55,16 @@ jobs:
         # tampering or an out-of-date lockfile after a zugot tag bump.
         run: cyrius deps --verify
 
-      - name: Lint validator (advisory)
-        # Currently advisory — validator carries one historical line-length
-        # warning that predates the 5.7.30 toolchain bump. Promote to
-        # fail-on-warn after a dedicated `cyrius fmt` sweep.
-        continue-on-error: true
-        run: cyrius lint scripts/validate_recipes.cyr
+      - name: Lint validator
+        # Fail on any "  warn " line. Validator is a single source file so
+        # no barrel-include / multi-entry handling like nous needs.
+        run: |
+          out=$(cyrius lint scripts/validate_recipes.cyr 2>&1)
+          echo "$out"
+          if echo "$out" | grep -qE '^\s*warn '; then
+            echo "lint: warnings present"
+            exit 1
+          fi
 
       - name: Vet
         run: cyrius vet scripts/validate_recipes.cyr

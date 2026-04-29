@@ -346,7 +346,7 @@ fn validate_file(path) {
     var url = toml_get(pairs, "url");
     # Shell-metachar check on version — see docs/audit/2026-04-16.md F5.
     if (version > 0 && version_has_shell_metachar(version) == 1) {
-        report_warn(path, "version contains shell metacharacters or leading '-' — command-injection risk if interpolated into [build]");
+        report_warn(path, "version has shell metachars or leading '-' (command-injection risk in [build])");
     }
     # HTTPS-only URL enforcement — see docs/audit/2026-04-16.md F4.
     if (url > 0 && str_len(url) > 0 && url_is_https(url) == 0) {
