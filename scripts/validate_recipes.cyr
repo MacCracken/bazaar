@@ -14,44 +14,12 @@
 
 var g_errors = 0;
 var g_warnings = 0;
-var g_cmdline[4096];
-var g_cmdline_len = 0;
 # Universe of package names bazaar recipes may depend on. Backed by a hashmap
 # for O(1) membership lookups — recipe dep lists reference ~900 names total,
 # so the linear-scan alternative added ~2ms to validator runtime.
 # zugot provides seed names via dist/zugot.cyr ([deps.zugot] in cyrius.cyml);
 # bazaar adds its own names in a lightweight first pass.
 var g_pkg_universe = 0;
-
-# Read /proc/self/cmdline into our global buffer.
-# Stdlib args_init stores a stack pointer in a global — dangles. We use
-# a global buffer so the pointer stays valid for the life of the program.
-fn read_cmdline() {
-    var fd = syscall(2, "/proc/self/cmdline", 0, 0);
-    if (fd < 0) { return 0; }
-    g_cmdline_len = syscall(0, fd, &g_cmdline, 4096);
-    syscall(3, fd);
-    return g_cmdline_len;
-}
-
-# Return pointer to the nth null-terminated argv string, or 0 if absent.
-fn arg_at(n) {
-    if (g_cmdline_len <= 0) { return 0; }
-    if (n == 0) { return &g_cmdline; }
-    var count = 0;
-    var i = 0;
-    while (i < g_cmdline_len) {
-        if (load8(&g_cmdline + i) == 0) {
-            count = count + 1;
-            if (count == n) {
-                if (i + 1 >= g_cmdline_len) { return 0; }
-                return &g_cmdline + i + 1;
-            }
-        }
-        i = i + 1;
-    }
-    return 0;
-}
 
 fn print_cstr(s) {
     syscall(1, 1, s, strlen(s));
@@ -374,11 +342,16 @@ fn validate_file(path) {
 
 fn main() {
     alloc_init();
-    read_cmdline();
+    args_init();
 
-    var root_cstr = arg_at(1);
+    # Optional first positional arg overrides the recipe root. Guard on argc():
+    # stdlib argv(n) returns a pointer past the last arg (not 0) when n == argc,
+    # so checking the pointer alone would treat "no arg" as an empty-string root.
     var root = str_from("recipes");
-    if (root_cstr != 0) { root = str_from(root_cstr); }
+    if (argc() > 1) {
+        var root_cstr = argv(1);
+        if (root_cstr != 0) { root = str_from(root_cstr); }
+    }
 
     # Populate the dep universe: zugot (via the deps-resolved module) plus
     # every bazaar package name collected in a first pass over the recipe tree.

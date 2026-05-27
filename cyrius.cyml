@@ -11,14 +11,14 @@ description = "Bazaar — community recipe repository for AGNOS"
 license = "GPL-3.0-only"
 repository = "https://github.com/MacCracken/bazaar"
 language = "cyrius"
-cyrius = "5.7.30"
+cyrius = "6.0.3"
 
 [build]
 entry = "scripts/validate_recipes.cyr"
 output = "build/bazaar-validate"
 
 [deps]
-stdlib = ["string", "fmt", "alloc", "vec", "str", "io", "syscalls", "fs", "toml", "hashmap"]
+stdlib = ["string", "fmt", "alloc", "args", "vec", "str", "io", "syscalls", "fs", "toml", "hashmap"]
 
 # Zugot publishes dist/zugot.cyr — a generated index of every package name
 # in the canonical recipe set. Bazaar's validator cross-checks every recipe
@@ -27,5 +27,5 @@ stdlib = ["string", "fmt", "alloc", "vec", "str", "io", "syscalls", "fs", "toml"
 [deps.zugot]
 git = "https://github.com/MacCracken/zugot.git"
 path = "../zugot"
-tag = "1.0.1"
+tag = "1.0.2"
 modules = ["dist/zugot.cyr"]

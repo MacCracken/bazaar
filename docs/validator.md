@@ -45,19 +45,19 @@ One source file, two kinds of deps in `cyrius.cyml`:
 
 ```toml
 [deps]
-stdlib = ["string", "fmt", "alloc", "vec", "str", "io", "syscalls", "fs", "toml", "hashmap"]
+stdlib = ["string", "fmt", "alloc", "args", "vec", "str", "io", "syscalls", "fs", "toml", "hashmap"]
 
 [deps.zugot]
 git    = "https://github.com/MacCracken/zugot.git"
-tag    = "1.0.1"
+tag    = "1.0.2"
 modules = ["dist/zugot.cyr"]
 ```
 
-`hashmap` powers O(1) dep lookups. `zugot` provides a generated `zugot_names(out)` function used to seed the universe of valid package names (see [ADR-006](adr/006-zugot-as-cyrius-dep.md)).
+`hashmap` powers O(1) dep lookups. `args` provides `argc()`/`argv()` for the optional recipe-root argument. `zugot` provides a generated `zugot_names(out)` function used to seed the universe of valid package names (see [ADR-006](adr/006-zugot-as-cyrius-dep.md)).
 
 The program flow:
 
-1. `alloc_init()` + custom cmdline reader (stdlib `args_init` stores a pointer to a function-local buffer in a global — still present in 5.7.30, worked around with a global buffer here)
+1. `alloc_init()` + stdlib `args_init()`; an optional first positional arg (via `argv(1)`, guarded on `argc()`) overrides the default `recipes/` root
 2. Build the package-name universe: seed from `zugot_names()`, then first-pass scan over `recipes/` collecting every bazaar `[package].name`
 3. `find_files(root, "cyml")` — walks the tree via `getdents64`
 4. Second pass: for each file, `toml_parse_file()` → check required keys → filename match → sha256 format → https URL → shell-metachar version → cross-check every `[depends]` entry against the universe
@@ -119,7 +119,7 @@ The workflow exposes a `workflow_call:` trigger so `release.yml` can gate tagged
 
 ## Known rough edges
 
-- **stdlib `lib/args.cyr` stack-dangle** — `args_init()` stores `&buf` from a function-local array into a global; bytes are clobbered after return. Still present in 5.7.30. Validator includes an inline replacement reader using a global buffer. Remove when stdlib is fixed upstream.
+- **stdlib `argv(n)` returns a non-null pointer past the last arg when `n == argc()`** (not `0`). The optional-root handling guards on `argc() > 1` before reading `argv(1)`; testing the pointer alone treats the no-arg case as an empty-string root (silently validates nothing). The older `args_init` stack-dangle bug that forced a hand-rolled `/proc/self/cmdline` reader was fixed in 6.0.3 — that workaround has been removed in favor of stdlib `args_init`/`argv`.
 - **Cyrius stdlib `toml` parser flattens sections** — the validator can check required keys exist but not enforce section membership. Switch to nous' `cyml_parse` when it lands in stdlib.
 - **Filename/name mismatch error doesn't suggest `pkgbase`** — just says the stems don't match. If a contributor hits this legitimately (parallel version), they have to find [ADR-003](adr/003-pkgbase-for-filename-divergence.md) themselves.
 - **Empty `sha256` is a warning, not an error** — intentional drafting grace period. A `--strict` mode that errors on this, toggled on for merge-targeting PRs, is tracked in [audit F7](audit/2026-04-16.md).

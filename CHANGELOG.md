@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-05-27
+
+Lockstep release with zugot 1.0.2 — `[deps.zugot].tag` bumped accordingly. `dist/zugot.cyr` is byte-identical between zugot 1.0.1 and 1.0.2 (hash `61205111…` unchanged), so the zugot module entry in `cyrius.lock` is unchanged.
+
+### Changed
+
+- **Cyrius toolchain bumped to 6.0.3** in `cyrius.cyml` (was 5.7.30) — a major-version upgrade. Validator builds and validates the full recipe corpus with 0 errors; all 13 fixture tests pass; bench median 2.879ms, within 2× baseline.
+- **`[deps.zugot].tag` bumped to 1.0.2** to track zugot's latest release (lockstep guard in `release.yml` enforces this on tag push).
+- **`cyrius.lock` now records the full transitive dependency set** (21 modules — stdlib + zugot) rather than only the zugot dist module. This reflects the 6.0.x lock format; regenerated via `cyrius deps` and verified with `cyrius deps --verify`. The zugot dist-module hash is unchanged.
+- **Validator argv handling switched to stdlib `args` (`args_init`/`argc`/`argv`).** The 6.0.3 stdlib fixes the `args_init` stack-dangle bug (function-local `var buf` whose address was stored in the `_args_base` global — now heap-allocated via `alloc`), so the validator's hand-rolled `/proc/self/cmdline` reader (`read_cmdline()`/`arg_at()`) and its 4 KB global buffer were removed. `"args"` added to `[deps].stdlib`. The optional recipe-root arg is now guarded on `argc()` because stdlib `argv(n)` returns a pointer past the last arg (not `0`) when `n == argc()`.
+
+### Documentation
+
+- `docs/validator.md`: program-flow and "known rough edges" updated for the stdlib-`args` switch, including the `argc()`-guard gotcha.
+- `docs/adr/002-cyrius-native-validator.md` and `docs/audit/2026-04-16.md` aligned to the 6.0.3 toolchain.
+
 ## [1.0.1] - 2026-04-28
 
 Lockstep release with zugot 1.0.1 — `[deps.zugot].tag` bumped accordingly. `dist/zugot.cyr` is byte-identical between zugot 1.0.0 and 1.0.1, so `cyrius.lock` is unchanged from 1.0.0.
