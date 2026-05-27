@@ -4,13 +4,13 @@
 
 [package]
 name = "lmstudio"
-version = "0.3.16"
+version = "0.4.1"
 description = "LM Studio — discover, download, and run local LLMs with a desktop UI"
 license = "Proprietary"
 groups = ["ai", "llm", "desktop"]
 
 [source]
-url = "https://releases.lmstudio.ai/linux/x86_64/0.3.16/LM-Studio-0.3.16-x86_64.AppImage"
+url = "https://installers.lmstudio.ai/linux/x64/0.4.1-1/LM-Studio-0.4.1-1-x64.AppImage"
 sha256 = ""
 
 [depends]

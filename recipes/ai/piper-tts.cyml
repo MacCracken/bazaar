@@ -3,13 +3,13 @@
 
 [package]
 name = "piper-tts"
-version = "2024.11.14"
+version = "2023.11.14-2"
 description = "Piper — fast local neural text-to-speech engine"
 license = "MIT"
 groups = ["ai", "speech", "tts"]
 
 [source]
-url = "https://github.com/rhasspy/piper/archive/refs/tags/2024.11.14.tar.gz"
+url = "https://github.com/rhasspy/piper/archive/refs/tags/2023.11.14-2.tar.gz"
 sha256 = ""
 
 [depends]
