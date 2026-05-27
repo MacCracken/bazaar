@@ -2,13 +2,13 @@
 
 [package]
 name = "wlroots"
-version = "0.18.2"
+version = "0.20.1"
 description = "wlroots — modular Wayland compositor library"
 license = "MIT"
 groups = ["desktops", "wayland", "libraries"]
 
 [source]
-url = "https://gitlab.freedesktop.org/wlroots/wlroots/-/releases/0.18.2/downloads/wlroots-0.18.2.tar.gz"
+url = "https://gitlab.freedesktop.org/wlroots/wlroots/-/releases/0.20.1/downloads/wlroots-0.20.1.tar.gz"
 sha256 = ""
 
 [depends]

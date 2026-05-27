@@ -6,7 +6,7 @@
 
 [package]
 name = "libadwaita"
-version = "1.6.2"
+version = "1.9.1"
 description = "libadwaita — GNOME adaptive UI library for GTK4"
 license = "LGPL-2.1-or-later"
 groups = ["desktop", "gui"]
@@ -14,7 +14,7 @@ release = 1
 arch = "x86_64"
 
 [source]
-url = "https://download.gnome.org/sources/libadwaita/1.6/libadwaita-1.6.2.tar.xz"
+url = "https://download.gnome.org/sources/libadwaita/1.9/libadwaita-1.9.1.tar.xz"
 sha256 = ""
 patches = []
 

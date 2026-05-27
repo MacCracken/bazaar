@@ -6,7 +6,7 @@
 
 [package]
 name = "xfce-libs"
-version = "4.20.0"
+version = "4.20.1"
 description = "Xfce foundation libraries (libxfce4util, xfconf, exo, libxfce4ui)"
 license = "GPL-2.0-or-later"
 groups = ["desktop", "xfce"]
@@ -14,7 +14,7 @@ release = 1
 arch = "x86_64"
 
 [source]
-url = "https://archive.xfce.org/src/xfce/libxfce4util/4.20/libxfce4util-4.20.0.tar.bz2"
+url = "https://archive.xfce.org/src/xfce/libxfce4util/4.20/libxfce4util-4.20.1.tar.bz2"
 sha256 = ""
 patches = []
 # Additional source tarballs fetched in pre_build

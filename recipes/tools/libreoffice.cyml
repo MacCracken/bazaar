@@ -3,13 +3,13 @@
 
 [package]
 name = "libreoffice"
-version = "25.2.3"
+version = "26.2.4"
 description = "LibreOffice — free office suite (Writer, Calc, Impress, Draw, Base)"
 license = "MPL-2.0"
 groups = ["tools", "office", "desktop"]
 
 [source]
-url = "https://download.documentfoundation.org/libreoffice/src/25.2.3/libreoffice-25.2.3.2.tar.xz"
+url = "https://download.documentfoundation.org/libreoffice/src/26.2.4/libreoffice-26.2.4.1.tar.xz"
 sha256 = ""
 
 [depends]

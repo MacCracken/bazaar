@@ -3,13 +3,13 @@
 
 [package]
 name = "wofi"
-version = "1.4.1"
+version = "1.5"
 description = "wofi — Wayland-native application launcher (rofi/dmenu alternative)"
 license = "GPL-3.0"
 groups = ["desktops", "wayland"]
 
 [source]
-url = "https://hg.sr.ht/~scoopta/wofi/archive/v1.4.1.tar.gz"
+url = "https://hg.sr.ht/~scoopta/wofi/archive/v1.5.tar.gz"
 sha256 = ""
 
 [depends]

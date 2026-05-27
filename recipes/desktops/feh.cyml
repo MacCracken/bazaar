@@ -4,7 +4,7 @@
 
 [package]
 name = "feh"
-version = "3.10.3"
+version = "3.12.2"
 description = "feh — fast, lightweight X11 image viewer"
 license = "MIT"
 groups = ["desktop", "image"]
@@ -12,7 +12,7 @@ release = 1
 arch = "x86_64"
 
 [source]
-url = "https://feh.finalrewind.org/feh-3.10.3.tar.bz2"
+url = "https://feh.finalrewind.org/feh-3.12.2.tar.bz2"
 sha256 = ""
 patches = []
 

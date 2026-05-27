@@ -6,7 +6,7 @@
 
 [package]
 name = "thunar"
-version = "4.20.2"
+version = "4.20.8"
 description = "Thunar — lightweight Xfce file manager"
 license = "GPL-2.0-or-later"
 groups = ["desktop", "filemanager"]
@@ -14,7 +14,7 @@ release = 1
 arch = "x86_64"
 
 [source]
-url = "https://archive.xfce.org/src/xfce/thunar/4.20/thunar-4.20.2.tar.bz2"
+url = "https://archive.xfce.org/src/xfce/thunar/4.20/thunar-4.20.8.tar.bz2"
 sha256 = ""
 patches = []
 

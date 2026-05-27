@@ -3,13 +3,13 @@
 
 [package]
 name = "gimp"
-version = "3.0.4"
+version = "3.2.4"
 description = "GIMP — GNU Image Manipulation Program"
 license = "GPL-3.0"
 groups = ["tools", "graphics", "desktop"]
 
 [source]
-url = "https://download.gimp.org/pub/gimp/v3.0/gimp-3.0.4.tar.xz"
+url = "https://download.gimp.org/pub/gimp/v3.2/gimp-3.2.4.tar.xz"
 sha256 = ""
 
 [depends]

@@ -6,7 +6,7 @@
 
 [package]
 name = "xarchiver"
-version = "0.5.4.23"
+version = "0.5.4.26"
 description = "Xarchiver — lightweight GTK archive manager"
 license = "GPL-2.0-or-later"
 groups = ["desktop", "utility"]
@@ -14,7 +14,7 @@ release = 1
 arch = "x86_64"
 
 [source]
-url = "https://github.com/ib/xarchiver/archive/refs/tags/0.5.4.23.tar.gz"
+url = "https://github.com/ib/xarchiver/archive/refs/tags/0.5.4.26.tar.gz"
 sha256 = ""
 patches = []
 

@@ -6,7 +6,7 @@
 
 [package]
 name = "qt5-base"
-version = "5.15.16"
+version = "5.15.19"
 description = "Qt 5 Base — cross-platform application framework (core module)"
 license = "LGPL-3.0-or-later"
 groups = ["desktop", "gui", "framework"]
@@ -14,7 +14,7 @@ release = 1
 arch = "x86_64"
 
 [source]
-url = "https://download.qt.io/archive/qt/5.15/5.15.16/submodules/qtbase-everywhere-opensource-src-5.15.16.tar.xz"
+url = "https://download.qt.io/archive/qt/5.15/5.15.19/submodules/qtbase-everywhere-opensource-src-5.15.19.tar.xz"
 sha256 = ""
 patches = []
 

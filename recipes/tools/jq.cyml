@@ -2,13 +2,13 @@
 
 [package]
 name = "jq"
-version = "1.7.1"
+version = "1.8.1"
 description = "jq — lightweight command-line JSON processor"
 license = "MIT"
 groups = ["tools"]
 
 [source]
-url = "https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-1.7.1.tar.gz"
+url = "https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-1.8.1.tar.gz"
 sha256 = ""
 
 [depends]

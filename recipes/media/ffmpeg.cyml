@@ -4,13 +4,13 @@
 
 [package]
 name = "ffmpeg"
-version = "7.1.1"
+version = "8.1.1"
 description = "FFmpeg — complete multimedia framework (encode, decode, transcode, mux, demux, stream)"
 license = "LGPL-2.1"
 groups = ["media"]
 
 [source]
-url = "https://ffmpeg.org/releases/ffmpeg-7.1.1.tar.xz"
+url = "https://ffmpeg.org/releases/ffmpeg-8.1.1.tar.xz"
 sha256 = ""
 
 [depends]

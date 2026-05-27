@@ -2,13 +2,13 @@
 
 [package]
 name = "wireguard-tools"
-version = "1.0.20210914"
+version = "1.0.20260223"
 description = "WireGuard VPN userspace tools"
 license = "GPL-2.0"
 groups = ["networking", "vpn"]
 
 [source]
-url = "https://git.zx2c4.com/wireguard-tools/snapshot/wireguard-tools-1.0.20210914.tar.xz"
+url = "https://git.zx2c4.com/wireguard-tools/snapshot/wireguard-tools-1.0.20260223.tar.xz"
 sha256 = ""
 
 [depends]

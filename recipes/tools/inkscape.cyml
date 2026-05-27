@@ -2,13 +2,13 @@
 
 [package]
 name = "inkscape"
-version = "1.4.2"
+version = "1.4.4"
 description = "Inkscape — professional vector graphics editor"
 license = "GPL-3.0"
 groups = ["tools", "graphics", "desktop"]
 
 [source]
-url = "https://inkscape.org/gallery/item/52963/inkscape-1.4.2.tar.xz"
+url = "https://media.inkscape.org/dl/resources/file/inkscape-1.4.4.tar.xz"
 sha256 = ""
 
 [depends]

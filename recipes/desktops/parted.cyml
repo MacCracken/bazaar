@@ -5,7 +5,7 @@
 
 [package]
 name = "parted"
-version = "3.6"
+version = "3.7"
 description = "GNU Parted — partition manipulation program and library"
 license = "GPL-3.0-or-later"
 groups = ["desktop", "disk", "system"]
@@ -13,7 +13,7 @@ release = 1
 arch = "x86_64"
 
 [source]
-url = "https://ftp.gnu.org/gnu/parted/parted-3.6.tar.xz"
+url = "https://ftp.gnu.org/gnu/parted/parted-3.7.tar.xz"
 sha256 = ""
 patches = []
 

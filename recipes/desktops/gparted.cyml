@@ -6,7 +6,7 @@
 
 [package]
 name = "gparted"
-version = "1.7.0"
+version = "1.8.1"
 description = "GParted — GNOME partition editor"
 license = "GPL-2.0-or-later"
 groups = ["desktop", "disk", "system"]
@@ -14,7 +14,7 @@ release = 1
 arch = "x86_64"
 
 [source]
-url = "https://downloads.sourceforge.net/gparted/gparted-1.7.0.tar.gz"
+url = "https://downloads.sourceforge.net/gparted/gparted-1.8.1.tar.gz"
 sha256 = ""
 patches = []
 
