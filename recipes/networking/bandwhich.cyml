@@ -2,13 +2,13 @@
 
 [package]
 name = "bandwhich"
-version = "0.22.2"
+version = "0.23.1"
 description = "bandwhich — terminal bandwidth utilization tool per process/connection"
 license = "MIT"
 groups = ["networking", "monitoring"]
 
 [source]
-url = "https://github.com/imsnif/bandwhich/archive/refs/tags/v0.22.2.tar.gz"
+url = "https://github.com/imsnif/bandwhich/archive/refs/tags/v0.23.1.tar.gz"
 sha256 = ""
 
 [depends]

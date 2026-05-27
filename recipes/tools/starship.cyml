@@ -2,13 +2,13 @@
 
 [package]
 name = "starship"
-version = "1.23.0"
+version = "1.25.1"
 description = "Starship — minimal, blazing-fast cross-shell prompt"
 license = "ISC"
 groups = ["tools", "shell"]
 
 [source]
-url = "https://github.com/starship/starship/archive/refs/tags/v1.23.0.tar.gz"
+url = "https://github.com/starship/starship/archive/refs/tags/v1.25.1.tar.gz"
 sha256 = ""
 
 [depends]

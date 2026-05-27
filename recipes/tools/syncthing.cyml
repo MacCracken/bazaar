@@ -3,13 +3,13 @@
 
 [package]
 name = "syncthing"
-version = "1.29.6"
+version = "2.1.0"
 description = "Syncthing — continuous peer-to-peer file synchronization"
 license = "MPL-2.0"
 groups = ["tools", "sync"]
 
 [source]
-url = "https://github.com/syncthing/syncthing/archive/refs/tags/v1.29.6.tar.gz"
+url = "https://github.com/syncthing/syncthing/archive/refs/tags/v2.1.0.tar.gz"
 sha256 = ""
 
 [depends]

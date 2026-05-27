@@ -2,13 +2,13 @@
 
 [package]
 name = "yt-dlp"
-version = "2025.03.31"
+version = "2026.03.17"
 description = "yt-dlp — feature-rich command-line video downloader"
 license = "Unlicense"
 groups = ["media", "tools"]
 
 [source]
-url = "https://github.com/yt-dlp/yt-dlp/archive/refs/tags/2025.03.31.tar.gz"
+url = "https://github.com/yt-dlp/yt-dlp/archive/refs/tags/2026.03.17.tar.gz"
 sha256 = ""
 
 [depends]

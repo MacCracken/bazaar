@@ -4,7 +4,7 @@
 
 [package]
 name = "dunst"
-version = "1.12.1"
+version = "1.13.2"
 description = "Dunst — lightweight and customizable notification daemon"
 license = "BSD-3-Clause"
 groups = ["desktop", "notification"]
@@ -12,7 +12,7 @@ release = 1
 arch = "x86_64"
 
 [source]
-url = "https://github.com/dunst-project/dunst/archive/refs/tags/v1.12.1.tar.gz"
+url = "https://github.com/dunst-project/dunst/archive/refs/tags/v1.13.2.tar.gz"
 sha256 = ""
 patches = []
 

@@ -2,13 +2,13 @@
 
 [package]
 name = "hyprcursor"
-version = "0.1.12"
+version = "0.1.13"
 description = "hyprcursor — cursor theme library for Hyprland"
 license = "BSD-3-Clause"
 groups = ["desktops", "wayland", "libraries"]
 
 [source]
-url = "https://github.com/hyprwm/hyprcursor/archive/refs/tags/v0.1.12.tar.gz"
+url = "https://github.com/hyprwm/hyprcursor/archive/refs/tags/v0.1.13.tar.gz"
 sha256 = ""
 
 [depends]

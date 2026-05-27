@@ -2,13 +2,13 @@
 
 [package]
 name = "bat"
-version = "0.25.0"
+version = "0.26.1"
 description = "bat — cat with wings (syntax highlighting, git integration)"
 license = "MIT"
 groups = ["tools"]
 
 [source]
-url = "https://github.com/sharkdp/bat/archive/refs/tags/v0.25.0.tar.gz"
+url = "https://github.com/sharkdp/bat/archive/refs/tags/v0.26.1.tar.gz"
 sha256 = ""
 
 [depends]

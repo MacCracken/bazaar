@@ -2,13 +2,13 @@
 
 [package]
 name = "retroarch"
-version = "1.20.0"
+version = "1.22.2"
 description = "RetroArch — multi-system emulator frontend (libretro)"
 license = "GPL-3.0"
 groups = ["games", "emulation"]
 
 [source]
-url = "https://github.com/libretro/RetroArch/archive/refs/tags/v1.20.0.tar.gz"
+url = "https://github.com/libretro/RetroArch/archive/refs/tags/v1.22.2.tar.gz"
 sha256 = ""
 
 [depends]

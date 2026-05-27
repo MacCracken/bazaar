@@ -2,13 +2,13 @@
 
 [package]
 name = "fd"
-version = "10.2.0"
+version = "10.4.2"
 description = "fd — simple, fast, user-friendly alternative to find"
 license = "MIT"
 groups = ["tools", "search"]
 
 [source]
-url = "https://github.com/sharkdp/fd/archive/refs/tags/v10.2.0.tar.gz"
+url = "https://github.com/sharkdp/fd/archive/refs/tags/v10.4.2.tar.gz"
 sha256 = ""
 
 [depends]

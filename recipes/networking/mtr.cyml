@@ -2,13 +2,13 @@
 
 [package]
 name = "mtr"
-version = "0.95"
+version = "0.96"
 description = "mtr — network diagnostic tool combining traceroute and ping"
 license = "GPL-2.0"
 groups = ["networking", "diagnostics"]
 
 [source]
-url = "https://github.com/traviscross/mtr/archive/refs/tags/v0.95.tar.gz"
+url = "https://github.com/traviscross/mtr/archive/refs/tags/v0.96.tar.gz"
 sha256 = ""
 
 [depends]

@@ -2,13 +2,13 @@
 
 [package]
 name = "keepassxc"
-version = "2.7.9"
+version = "2.7.12"
 description = "KeePassXC — cross-platform password manager"
 license = "GPL-3.0"
 groups = ["security", "desktop"]
 
 [source]
-url = "https://github.com/keepassxreboot/keepassxc/releases/download/2.7.9/keepassxc-2.7.9-src.tar.xz"
+url = "https://github.com/keepassxreboot/keepassxc/releases/download/2.7.12/keepassxc-2.7.12-src.tar.xz"
 sha256 = ""
 
 [depends]

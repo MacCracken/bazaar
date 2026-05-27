@@ -3,13 +3,13 @@
 
 [package]
 name = "waybar"
-version = "0.11.0"
+version = "0.15.0"
 description = "Waybar — highly customizable Wayland bar for sway and other compositors"
 license = "MIT"
 groups = ["desktops", "wayland"]
 
 [source]
-url = "https://github.com/Alexays/Waybar/archive/refs/tags/0.11.0.tar.gz"
+url = "https://github.com/Alexays/Waybar/archive/refs/tags/0.15.0.tar.gz"
 sha256 = ""
 
 [depends]

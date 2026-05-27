@@ -2,13 +2,13 @@
 
 [package]
 name = "hyprlang"
-version = "0.6.0"
+version = "0.6.8"
 description = "hyprlang — Hyprland configuration language parser"
 license = "LGPL-3.0"
 groups = ["desktops", "wayland", "libraries"]
 
 [source]
-url = "https://github.com/hyprwm/hyprlang/archive/refs/tags/v0.6.0.tar.gz"
+url = "https://github.com/hyprwm/hyprlang/archive/refs/tags/v0.6.8.tar.gz"
 sha256 = ""
 
 [depends]

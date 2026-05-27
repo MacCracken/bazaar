@@ -3,13 +3,13 @@
 
 [package]
 name = "vllm"
-version = "0.8.5"
+version = "0.21.0"
 description = "vLLM — high-throughput LLM serving with PagedAttention"
 license = "Apache-2.0"
 groups = ["ai", "llm", "serving"]
 
 [source]
-url = "https://github.com/vllm-project/vllm/archive/refs/tags/v0.8.5.tar.gz"
+url = "https://github.com/vllm-project/vllm/archive/refs/tags/v0.21.0.tar.gz"
 sha256 = ""
 
 [depends]

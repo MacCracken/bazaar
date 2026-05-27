@@ -4,13 +4,13 @@
 
 [package]
 name = "docker"
-version = "28.1.1"
+version = "28.5.2"
 description = "Docker — container runtime and CLI"
 license = "Apache-2.0"
 groups = ["tools", "containers"]
 
 [source]
-url = "https://github.com/moby/moby/archive/refs/tags/v28.1.1.tar.gz"
+url = "https://github.com/moby/moby/archive/refs/tags/v28.5.2.tar.gz"
 sha256 = ""
 
 [depends]

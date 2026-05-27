@@ -3,13 +3,13 @@
 
 [package]
 name = "podman"
-version = "5.5.2"
+version = "5.8.2"
 description = "Podman — daemonless container engine (rootless, Docker CLI compatible)"
 license = "Apache-2.0"
 groups = ["tools", "containers"]
 
 [source]
-url = "https://github.com/containers/podman/archive/refs/tags/v5.5.2.tar.gz"
+url = "https://github.com/containers/podman/archive/refs/tags/v5.8.2.tar.gz"
 sha256 = ""
 
 [depends]

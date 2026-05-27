@@ -2,13 +2,13 @@
 
 [package]
 name = "ripgrep"
-version = "14.1.1"
+version = "15.1.0"
 description = "ripgrep — fast line-oriented search tool (rg)"
 license = "MIT"
 groups = ["tools", "search"]
 
 [source]
-url = "https://github.com/BurntSushi/ripgrep/archive/refs/tags/14.1.1.tar.gz"
+url = "https://github.com/BurntSushi/ripgrep/archive/refs/tags/15.1.0.tar.gz"
 sha256 = ""
 
 [depends]

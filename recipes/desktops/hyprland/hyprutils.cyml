@@ -2,13 +2,13 @@
 
 [package]
 name = "hyprutils"
-version = "0.7.0"
+version = "0.13.1"
 description = "hyprutils — shared utility library for the Hyprland ecosystem"
 license = "BSD-3-Clause"
 groups = ["desktops", "wayland", "libraries"]
 
 [source]
-url = "https://github.com/hyprwm/hyprutils/archive/refs/tags/v0.7.0.tar.gz"
+url = "https://github.com/hyprwm/hyprutils/archive/refs/tags/v0.13.1.tar.gz"
 sha256 = ""
 
 [depends]

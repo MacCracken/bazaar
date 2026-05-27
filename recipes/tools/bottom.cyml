@@ -2,13 +2,13 @@
 
 [package]
 name = "bottom"
-version = "0.10.2"
+version = "0.12.3"
 description = "bottom (btm) — graphical process/system monitor for the terminal"
 license = "MIT"
 groups = ["tools", "monitoring"]
 
 [source]
-url = "https://github.com/ClementTsang/bottom/archive/refs/tags/0.10.2.tar.gz"
+url = "https://github.com/ClementTsang/bottom/archive/refs/tags/0.12.3.tar.gz"
 sha256 = ""
 
 [depends]

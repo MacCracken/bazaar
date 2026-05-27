@@ -3,13 +3,13 @@
 
 [package]
 name = "pytorch"
-version = "2.6.0"
+version = "2.12.0"
 description = "PyTorch — open-source machine learning framework"
 license = "BSD-3-Clause"
 groups = ["ai", "ml", "libraries"]
 
 [source]
-url = "https://github.com/pytorch/pytorch/releases/download/v2.6.0/pytorch-v2.6.0.tar.gz"
+url = "https://github.com/pytorch/pytorch/releases/download/v2.12.0/pytorch-v2.12.0.tar.gz"
 sha256 = ""
 
 [depends]

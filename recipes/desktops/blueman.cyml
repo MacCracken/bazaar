@@ -6,7 +6,7 @@
 
 [package]
 name = "blueman"
-version = "2.4.3"
+version = "2.4.6"
 description = "Blueman — GTK Bluetooth manager"
 license = "GPL-3.0-or-later"
 groups = ["desktop", "bluetooth", "hardware"]
@@ -14,7 +14,7 @@ release = 1
 arch = "x86_64"
 
 [source]
-url = "https://github.com/blueman-project/blueman/releases/download/2.4.3/blueman-2.4.3.tar.xz"
+url = "https://github.com/blueman-project/blueman/releases/download/2.4.6/blueman-2.4.6.tar.xz"
 sha256 = ""
 patches = []
 

@@ -3,13 +3,13 @@
 
 [package]
 name = "onnxruntime"
-version = "1.22.0"
+version = "1.26.0"
 description = "ONNX Runtime — high-performance ML inference and training engine"
 license = "MIT"
 groups = ["ai", "ml", "libraries"]
 
 [source]
-url = "https://github.com/microsoft/onnxruntime/archive/refs/tags/v1.22.0.tar.gz"
+url = "https://github.com/microsoft/onnxruntime/archive/refs/tags/v1.26.0.tar.gz"
 sha256 = ""
 
 [depends]

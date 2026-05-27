@@ -2,13 +2,13 @@
 
 [package]
 name = "k9s"
-version = "0.40.5"
+version = "0.50.18"
 description = "k9s — terminal UI to interact with Kubernetes clusters"
 license = "Apache-2.0"
 groups = ["tools", "kubernetes"]
 
 [source]
-url = "https://github.com/derailed/k9s/archive/refs/tags/v0.40.5.tar.gz"
+url = "https://github.com/derailed/k9s/archive/refs/tags/v0.50.18.tar.gz"
 sha256 = ""
 
 [depends]

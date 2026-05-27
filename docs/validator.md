@@ -59,7 +59,7 @@ The program flow:
 
 1. `alloc_init()` + stdlib `args_init()`; an optional first positional arg (via `argv(1)`, guarded on `argc()`) overrides the default `recipes/` root
 2. Build the package-name universe: seed from `zugot_names()`, then first-pass scan over `recipes/` collecting every bazaar `[package].name`
-3. `find_files(root, "cyml")` — walks the tree via `getdents64`
+3. `collect_cyml(root, …)` — a validator-local recursive walk over `getdents64`, using the `d_type` field to descend (stdlib `find_files`/`is_dir` silently skips whole directories — see Known rough edges)
 4. Second pass: for each file, `toml_parse_file()` → check required keys → filename match → sha256 format → https URL → shell-metachar version → cross-check every `[depends]` entry against the universe
 5. Print summary, exit with error count
 
@@ -120,6 +120,7 @@ The workflow exposes a `workflow_call:` trigger so `release.yml` can gate tagged
 ## Known rough edges
 
 - **stdlib `argv(n)` returns a non-null pointer past the last arg when `n == argc()`** (not `0`). The optional-root handling guards on `argc() > 1` before reading `argv(1)`; testing the pointer alone treats the no-arg case as an empty-string root (silently validates nothing). The older `args_init` stack-dangle bug that forced a hand-rolled `/proc/self/cmdline` reader was fixed in 6.0.3 — that workaround has been removed in favor of stdlib `args_init`/`argv`.
+- **stdlib `is_dir()` 32-byte `getdents64` buffer (worked around)** — `is_dir()` reports "not a directory" when a dir's first entry (in filesystem hash order, *not* `.`/`..` first on ext4/btrfs) has a name ≥ 13 chars, because `getdents64` returns `-EINVAL` when the buffer can't hold the first record. This made stdlib `find_files`/`dir_walk` silently skip whole subtrees (`recipes/ai`, `recipes/networking`, `recipes/games`, `recipes/desktops/hyprland` — 26 recipes invisible to the validator *and* CI). The validator now uses its own `collect_cyml()` walk driven by `getdents64` `d_type`, with a large-buffer `dir_ok()` fallback for `DT_UNKNOWN`. Remove when stdlib `is_dir` is fixed upstream (report filed against cyrius).
 - **Cyrius stdlib `toml` parser flattens sections** — the validator can check required keys exist but not enforce section membership. Switch to nous' `cyml_parse` when it lands in stdlib.
 - **Filename/name mismatch error doesn't suggest `pkgbase`** — just says the stems don't match. If a contributor hits this legitimately (parallel version), they have to find [ADR-003](adr/003-pkgbase-for-filename-divergence.md) themselves.
 - **Empty `sha256` is a warning, not an error** — intentional drafting grace period. A `--strict` mode that errors on this, toggled on for merge-targeting PRs, is tracked in [audit F7](audit/2026-04-16.md).

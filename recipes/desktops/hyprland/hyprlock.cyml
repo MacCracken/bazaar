@@ -2,13 +2,13 @@
 
 [package]
 name = "hyprlock"
-version = "0.7.1"
+version = "0.9.5"
 description = "hyprlock — GPU-accelerated screen locker for Hyprland"
 license = "BSD-3-Clause"
 groups = ["desktops", "wayland"]
 
 [source]
-url = "https://github.com/hyprwm/hyprlock/archive/refs/tags/v0.7.1.tar.gz"
+url = "https://github.com/hyprwm/hyprlock/archive/refs/tags/v0.9.5.tar.gz"
 sha256 = ""
 
 [depends]

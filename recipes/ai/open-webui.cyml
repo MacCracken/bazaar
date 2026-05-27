@@ -3,13 +3,13 @@
 
 [package]
 name = "open-webui"
-version = "0.6.10"
+version = "0.9.5"
 description = "Open WebUI — self-hosted ChatGPT-style interface for local and cloud LLMs"
 license = "MIT"
 groups = ["ai", "llm", "web"]
 
 [source]
-url = "https://github.com/open-webui/open-webui/archive/refs/tags/v0.6.10.tar.gz"
+url = "https://github.com/open-webui/open-webui/archive/refs/tags/v0.9.5.tar.gz"
 sha256 = ""
 
 [depends]

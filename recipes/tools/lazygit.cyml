@@ -2,13 +2,13 @@
 
 [package]
 name = "lazygit"
-version = "0.50.0"
+version = "0.62.0"
 description = "lazygit — simple terminal UI for git commands"
 license = "MIT"
 groups = ["tools", "git"]
 
 [source]
-url = "https://github.com/jesseduffield/lazygit/archive/refs/tags/v0.50.0.tar.gz"
+url = "https://github.com/jesseduffield/lazygit/archive/refs/tags/v0.62.0.tar.gz"
 sha256 = ""
 
 [depends]

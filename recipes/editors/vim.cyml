@@ -2,13 +2,13 @@
 
 [package]
 name = "vim"
-version = "9.1.1000"
+version = "9.2.0543"
 description = "Vim — the ubiquitous text editor"
 license = "Vim"
 groups = ["editors"]
 
 [source]
-url = "https://github.com/vim/vim/archive/refs/tags/v9.1.1000.tar.gz"
+url = "https://github.com/vim/vim/archive/refs/tags/v9.2.0543.tar.gz"
 sha256 = ""
 
 [depends]

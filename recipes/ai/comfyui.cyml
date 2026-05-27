@@ -2,13 +2,13 @@
 
 [package]
 name = "comfyui"
-version = "0.3.30"
+version = "0.22.3"
 description = "ComfyUI — node-based image/video generation workflow engine"
 license = "GPL-3.0"
 groups = ["ai", "image-generation", "web"]
 
 [source]
-url = "https://github.com/comfyanonymous/ComfyUI/archive/refs/tags/v0.3.30.tar.gz"
+url = "https://github.com/comfyanonymous/ComfyUI/archive/refs/tags/v0.22.3.tar.gz"
 sha256 = ""
 
 [depends]

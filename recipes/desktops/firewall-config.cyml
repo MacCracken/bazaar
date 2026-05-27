@@ -5,7 +5,7 @@
 
 [package]
 name = "firewall-config"
-version = "2.3.2"
+version = "2.4.1"
 description = "firewall-config — GTK firewall management GUI (firewalld frontend)"
 license = "GPL-2.0-or-later"
 groups = ["desktop", "network", "security"]
@@ -13,7 +13,7 @@ release = 1
 arch = "x86_64"
 
 [source]
-url = "https://github.com/firewalld/firewalld/releases/download/v2.3.2/firewalld-2.3.2.tar.bz2"
+url = "https://github.com/firewalld/firewalld/releases/download/v2.4.1/firewalld-2.4.1.tar.bz2"
 sha256 = ""
 patches = []
 

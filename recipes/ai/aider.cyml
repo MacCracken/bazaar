@@ -3,13 +3,13 @@
 
 [package]
 name = "aider"
-version = "0.83.2"
+version = "0.86.2"
 description = "aider — AI pair programming in your terminal"
 license = "Apache-2.0"
 groups = ["ai", "development"]
 
 [source]
-url = "https://github.com/paul-gauthier/aider/archive/refs/tags/v0.83.2.tar.gz"
+url = "https://github.com/paul-gauthier/aider/archive/refs/tags/v0.86.2.tar.gz"
 sha256 = ""
 
 [depends]

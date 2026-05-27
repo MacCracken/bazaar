@@ -2,13 +2,13 @@
 
 [package]
 name = "hyperfine"
-version = "1.19.0"
+version = "1.20.0"
 description = "hyperfine — command-line benchmarking tool"
 license = "MIT"
 groups = ["tools", "benchmarking"]
 
 [source]
-url = "https://github.com/sharkdp/hyperfine/archive/refs/tags/v1.19.0.tar.gz"
+url = "https://github.com/sharkdp/hyperfine/archive/refs/tags/v1.20.0.tar.gz"
 sha256 = ""
 
 [depends]

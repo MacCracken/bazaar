@@ -2,13 +2,13 @@
 
 [package]
 name = "hypridle"
-version = "0.1.6"
+version = "0.1.7"
 description = "hypridle — idle daemon for Hyprland"
 license = "BSD-3-Clause"
 groups = ["desktops", "wayland"]
 
 [source]
-url = "https://github.com/hyprwm/hypridle/archive/refs/tags/v0.1.6.tar.gz"
+url = "https://github.com/hyprwm/hypridle/archive/refs/tags/v0.1.7.tar.gz"
 sha256 = ""
 
 [depends]

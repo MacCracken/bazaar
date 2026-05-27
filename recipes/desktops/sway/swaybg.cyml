@@ -2,13 +2,13 @@
 
 [package]
 name = "swaybg"
-version = "1.2.1"
+version = "1.2.2"
 description = "swaybg — wallpaper tool for Wayland compositors"
 license = "MIT"
 groups = ["desktops", "wayland"]
 
 [source]
-url = "https://github.com/swaywm/swaybg/releases/download/v1.2.1/swaybg-1.2.1.tar.gz"
+url = "https://github.com/swaywm/swaybg/releases/download/v1.2.2/swaybg-1.2.2.tar.gz"
 sha256 = ""
 
 [depends]

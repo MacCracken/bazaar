@@ -3,13 +3,13 @@
 
 [package]
 name = "whisper-cpp"
-version = "1.7.5"
+version = "1.8.4"
 description = "whisper.cpp — OpenAI Whisper speech-to-text in C/C++ (CPU + GPU)"
 license = "MIT"
 groups = ["ai", "speech"]
 
 [source]
-url = "https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.7.5.tar.gz"
+url = "https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.8.4.tar.gz"
 sha256 = ""
 
 [depends]

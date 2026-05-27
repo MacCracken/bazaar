@@ -2,13 +2,13 @@
 
 [package]
 name = "tokei"
-version = "13.0.0-alpha.8"
+version = "14.0.0"
 description = "tokei — count lines of code quickly"
 license = "MIT"
 groups = ["tools", "development"]
 
 [source]
-url = "https://github.com/XAMPPRocky/tokei/archive/refs/tags/v13.0.0-alpha.8.tar.gz"
+url = "https://github.com/XAMPPRocky/tokei/archive/refs/tags/v14.0.0.tar.gz"
 sha256 = ""
 
 [depends]

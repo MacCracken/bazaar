@@ -7,13 +7,13 @@
 
 [package]
 name = "hyprland"
-version = "0.48.1"
+version = "0.55.2"
 description = "Hyprland — dynamic tiling Wayland compositor with animations and eye candy"
 license = "BSD-3-Clause"
 groups = ["desktops", "wayland"]
 
 [source]
-url = "https://github.com/hyprwm/Hyprland/releases/download/v0.48.1/source-v0.48.1.tar.gz"
+url = "https://github.com/hyprwm/Hyprland/releases/download/v0.55.2/source-v0.55.2.tar.gz"
 sha256 = ""
 
 [depends]

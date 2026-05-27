@@ -340,6 +340,72 @@ fn validate_file(path) {
     return 0;
 }
 
+# Robust directory check. stdlib is_dir() reads with a 32-byte getdents64
+# buffer; the kernel returns -EINVAL when the first directory entry's record
+# doesn't fit (any filename >= 13 chars → reclen > 32), so directories whose
+# first entry has a long name are misclassified as files. On ext4/btrfs,
+# getdents64 returns entries in hash order — not "."/".." first — so this hit
+# recipes/ai, recipes/networking, recipes/games, recipes/desktops/hyprland and
+# silently dropped them (and their recipes) from the walk. A buffer that holds
+# any single dirent (name <= 255) avoids the spurious -EINVAL.
+fn dir_ok(path_cstr) {
+    var fd = syscall(2, path_cstr, 0, 0);   # open(O_RDONLY)
+    if (fd < 0) { return 0; }
+    var b = alloc(1024);
+    var n = syscall(217, fd, b, 1024);      # getdents64
+    syscall(3, fd);
+    if (n >= 0) { return 1; }               # success → directory
+    return 0;                               # -ENOTDIR / -EINVAL → not a dir
+}
+
+# Recursively collect *.cyml paths under `dir` into `out`. Replaces stdlib
+# find_files/dir_walk, which route directory detection through the buggy
+# is_dir() above and silently skip whole subtrees. We use the getdents64
+# d_type field directly (DT_DIR = 4), falling back to dir_ok() only for
+# DT_UNKNOWN (filesystems that don't populate d_type).
+fn collect_cyml(dir, out) {
+    var fd = syscall(2, str_cstr(dir), 0, 0);
+    if (fd < 0) { return 0; }
+    var buf = alloc(32768);
+    var go = 1;
+    while (go == 1) {
+        var n = syscall(217, fd, buf, 32768);
+        if (n <= 0) { go = 0; }
+        else {
+            var pos = 0;
+            while (pos < n) {
+                var reclen = load16(buf + pos + 16);
+                var dtype = load8(buf + pos + 18);
+                var name = buf + pos + 19;
+                # Skip "." and ".."
+                var skip = 0;
+                if (load8(name) == 46) {
+                    if (load8(name + 1) == 0) { skip = 1; }
+                    if (load8(name + 1) == 46) {
+                        if (load8(name + 2) == 0) { skip = 1; }
+                    }
+                }
+                if (skip == 0) {
+                    # path_join copies the bytes (str_builder), so `child` is
+                    # independent of `buf` and survives the next getdents64.
+                    var child = path_join(dir, str_from(name));
+                    var isdir = 0;
+                    if (dtype == 4) { isdir = 1; }
+                    if (dtype == 0) { isdir = dir_ok(str_cstr(child)); }
+                    if (isdir == 1) {
+                        collect_cyml(child, out);
+                    } elif (str_ends_with(child, str_from(".cyml")) == 1) {
+                        vec_push(out, child);
+                    }
+                }
+                pos = pos + reclen;
+            }
+        }
+    }
+    syscall(3, fd);
+    return 0;
+}
+
 fn main() {
     alloc_init();
     args_init();
@@ -366,7 +432,8 @@ fn main() {
     }
     var zugot_count = map_size(g_pkg_universe);
 
-    var files = find_files(root, str_from("cyml"));
+    var files = vec_new();
+    collect_cyml(root, files);
     var total = vec_len(files);
     if (total == 0) {
         println_cstr("no .cyml recipes found under recipes/");
