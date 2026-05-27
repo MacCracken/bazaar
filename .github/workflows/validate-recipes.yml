@@ -38,23 +38,54 @@ jobs:
 
       - name: Install Cyrius toolchain
         # Read the pinned version from cyrius.cyml so the manifest is the
-        # single source of truth (matches nous/daimon CI). Tarball install
-        # closes docs/audit/2026-04-16.md F9 — no piping a fetched
+        # single source of truth (matches nous/daimon/patra CI). Tarball
+        # install closes docs/audit/2026-04-16.md F9 — no piping a fetched
         # install.sh into sh. The CYRIUS_VERSION env override lets a workflow
         # re-run test a different toolchain without editing the manifest.
+        #
+        # Cyrius 6.0.x is VERSION-MANAGED: the `cyrius` launcher reads the
+        # `cyrius =` pin from cyrius.cyml and dispatches to
+        # ~/.cyrius/versions/<pin>/bin/cyrius. The pre-6.0 flat layout
+        # (copying straight into ~/.cyrius/bin) makes `cyrius --version`
+        # fail with "manifest pins <v> but binary not installed at
+        # versions/<v>/bin/cyrius". So install into the versioned layout
+        # and symlink ~/.cyrius/bin → it (mirrors patra CI).
         run: |
+          set -e
           CYRIUS_VERSION="${CYRIUS_VERSION:-$(grep -oP '(?<=^cyrius = ")[^"]+' cyrius.cyml)}"
           echo "Installing Cyrius $CYRIUS_VERSION"
-          curl -sLO "https://github.com/MacCracken/cyrius/releases/download/$CYRIUS_VERSION/cyrius-$CYRIUS_VERSION-x86_64-linux.tar.gz"
-          tar xzf "cyrius-$CYRIUS_VERSION-x86_64-linux.tar.gz"
+          TARBALL="cyrius-$CYRIUS_VERSION-x86_64-linux.tar.gz"
+          URL="https://github.com/MacCracken/cyrius/releases/download/$CYRIUS_VERSION/$TARBALL"
+          # Pre-flight: fail clearly if the release asset is missing (e.g. the
+          # pin was bumped ahead of a published cyrius release) instead of
+          # letting curl save an error page that tar rejects as "not in gzip
+          # format".
+          HTTP_CODE=$(curl -sL -o /dev/null -w "%{http_code}" -I "$URL")
+          if [ "$HTTP_CODE" != "200" ] && [ "$HTTP_CODE" != "302" ]; then
+            echo "::error::Cyrius release $CYRIUS_VERSION not found (HTTP $HTTP_CODE): $URL"
+            echo "::error::Likely cyrius.cyml's 'cyrius =' pin is ahead of a published release."
+            exit 1
+          fi
+          curl -sLO "$URL"
+          if ! file "$TARBALL" | grep -q "gzip compressed"; then
+            echo "::error::Downloaded $TARBALL is not a gzip archive (first 200 bytes):"
+            head -c 200 "$TARBALL" || true
+            exit 1
+          fi
+          tar xzf "$TARBALL"
           CYRIUS_DIR="cyrius-$CYRIUS_VERSION-x86_64-linux"
-          mkdir -p "$HOME/.cyrius/bin" "$HOME/.cyrius/lib"
-          cp "$CYRIUS_DIR/bin/"* "$HOME/.cyrius/bin/" 2>/dev/null || true
-          cp -r "$CYRIUS_DIR/lib/"* "$HOME/.cyrius/lib/" 2>/dev/null || true
-          chmod +x "$HOME/.cyrius/bin/"* 2>/dev/null || true
+          VDIR="$HOME/.cyrius/versions/$CYRIUS_VERSION"
+          mkdir -p "$VDIR/bin" "$VDIR/lib"
+          cp "$CYRIUS_DIR/bin/"* "$VDIR/bin/" 2>/dev/null || true
+          cp "$CYRIUS_DIR/scripts/cyrius" "$VDIR/bin/cyrius" 2>/dev/null || true
+          cp -r "$CYRIUS_DIR/lib/"* "$VDIR/lib/" 2>/dev/null || true
+          chmod +x "$VDIR/bin/"* 2>/dev/null || true
+          ln -sfn "$VDIR/bin" "$HOME/.cyrius/bin"
+          ln -sfn "$VDIR/lib" "$HOME/.cyrius/lib"
+          echo "$CYRIUS_VERSION" > "$HOME/.cyrius/current"
           echo "$HOME/.cyrius/bin" >> $GITHUB_PATH
           echo "CYRIUS_HOME=$HOME/.cyrius" >> $GITHUB_ENV
-          rm -f "cyrius-$CYRIUS_VERSION-x86_64-linux.tar.gz"
+          rm -f "$TARBALL"
 
       - name: Verify toolchain
         run: cyrius --version
