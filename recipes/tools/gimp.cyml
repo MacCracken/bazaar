@@ -10,7 +10,7 @@ groups = ["tools", "graphics", "desktop"]
 
 [source]
 url = "https://download.gimp.org/pub/gimp/v3.2/gimp-3.2.4.tar.xz"
-sha256 = ""
+sha256 = "7312bc53e9c6d2d0056ca7b93f1c6b98707946dd934f714c21b8746ecb601588"
 
 [depends]
 runtime = ["glibc", "gtk3", "gegl", "babl", "glib", "cairo", "pango", "gdk-pixbuf", "libpng", "libjpeg-turbo", "libtiff"]

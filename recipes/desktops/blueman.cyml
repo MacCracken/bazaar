@@ -15,7 +15,7 @@ arch = "x86_64"
 
 [source]
 url = "https://github.com/blueman-project/blueman/releases/download/2.4.6/blueman-2.4.6.tar.xz"
-sha256 = ""
+sha256 = "c712a737f9855906684c074d166d4f10c7f165378af96612818bbffcfbf8e566"
 patches = []
 
 [depends]

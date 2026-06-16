@@ -4,14 +4,14 @@
 
 [package]
 name = "ollama"
-version = "0.24.0"
+version = "0.30.8"
 description = "Ollama — run large language models locally"
 license = "MIT"
 groups = ["ai", "llm"]
 
 [source]
-url = "https://github.com/ollama/ollama/archive/refs/tags/v0.24.0.tar.gz"
-sha256 = ""
+url = "https://github.com/ollama/ollama/archive/refs/tags/v0.30.8.tar.gz"
+sha256 = "9f3531305be8c1dcb00c9ad0a794b5916246a98c56796dc8ba69108fa2196369"
 
 [depends]
 runtime = ["glibc"]

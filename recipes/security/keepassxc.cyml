@@ -9,7 +9,7 @@ groups = ["security", "desktop"]
 
 [source]
 url = "https://github.com/keepassxreboot/keepassxc/releases/download/2.7.12/keepassxc-2.7.12-src.tar.xz"
-sha256 = ""
+sha256 = "be34eeb297881adea4f894c7c6e4a1835bd7927f8043ddea495040df4792a7de"
 
 [depends]
 runtime = ["glibc", "qt6-base", "libsodium", "libargon2", "zlib", "minizip"]

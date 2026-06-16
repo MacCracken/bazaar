@@ -11,7 +11,7 @@ groups = ["tools", "containers"]
 
 [source]
 url = "https://github.com/moby/moby/archive/refs/tags/v28.5.2.tar.gz"
-sha256 = ""
+sha256 = "0e450c03c536a1304ba8fd26ca4c4ff96fac62182fd042fec90ffdf4a0969d40"
 
 [depends]
 runtime = ["glibc", "containerd", "iptables", "iproute2"]

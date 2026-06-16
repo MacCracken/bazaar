@@ -3,14 +3,14 @@
 
 [package]
 name = "audacity"
-version = "3.7.7"
+version = "3.7.8"
 description = "Audacity — free, open-source, cross-platform audio editor"
 license = "GPL-3.0"
 groups = ["media", "audio"]
 
 [source]
-url = "https://github.com/audacity/audacity/archive/refs/tags/Audacity-3.7.7.tar.gz"
-sha256 = ""
+url = "https://github.com/audacity/audacity/archive/refs/tags/Audacity-3.7.8.tar.gz"
+sha256 = "ed680774b9ac104949b962e0642155ad093ab5ade14ad5d8468c6cfae0f1d9ea"
 
 [depends]
 runtime = ["glibc", "wxwidgets", "portaudio", "libsndfile", "libvorbis", "flac", "lame"]

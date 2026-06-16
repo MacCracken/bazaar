@@ -15,7 +15,7 @@ arch = "x86_64"
 
 [source]
 url = "https://download.gnome.org/sources/libadwaita/1.9/libadwaita-1.9.1.tar.xz"
-sha256 = ""
+sha256 = "2ae34dbb3ea56d270925707cefa36050482ec88a741f1810b7619a5377c41a66"
 patches = []
 
 [depends]

@@ -9,7 +9,7 @@ groups = ["tools", "graphics", "desktop"]
 
 [source]
 url = "https://media.inkscape.org/dl/resources/file/inkscape-1.4.4.tar.xz"
-sha256 = ""
+sha256 = "bbce5753a1e08b871a5cf16c665eb060700aaab9a6a379dc63f4c4d9b3b8856e"
 
 [depends]
 runtime = ["glibc", "gtk3", "libxml2", "libxslt", "cairo", "pango", "gdl", "boost", "gsl", "poppler"]

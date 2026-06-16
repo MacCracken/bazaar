@@ -9,7 +9,7 @@ groups = ["desktops", "wayland"]
 
 [source]
 url = "https://github.com/hyprwm/hyprlock/archive/refs/tags/v0.9.5.tar.gz"
-sha256 = ""
+sha256 = "cbc49fc5553c550131e1a15089847501de42579944814229bfa9f8ea18519f89"
 
 [depends]
 runtime = ["glibc", "wayland", "mesa", "cairo", "pango", "linux-pam", "hyprlang", "hyprutils", "sdbus-cpp"]

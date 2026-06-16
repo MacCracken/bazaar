@@ -15,7 +15,7 @@ arch = "x86_64"
 
 [source]
 url = "https://downloads.sourceforge.net/gparted/gparted-1.8.1.tar.gz"
-sha256 = ""
+sha256 = "67388ac405f9fe92a40636cb03b0e1e0bb6403ad89ccc174b2ff190ef6f32349"
 patches = []
 
 [depends]

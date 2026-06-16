@@ -3,14 +3,14 @@
 
 [package]
 name = "llama-cpp"
-version = "b9370"
+version = "b9672"
 description = "llama.cpp — LLM inference in C/C++ (CPU + CUDA/ROCm/Metal GPU)"
 license = "MIT"
 groups = ["ai", "llm"]
 
 [source]
-url = "https://github.com/ggml-org/llama.cpp/archive/refs/tags/b9370.tar.gz"
-sha256 = ""
+url = "https://github.com/ggml-org/llama.cpp/archive/refs/tags/b9672.tar.gz"
+sha256 = "a27ccaeb51c9a8b9d9e8160c64546bf067b14ddff47840175dbc7fa2e14c3c38"
 
 [depends]
 runtime = ["glibc"]

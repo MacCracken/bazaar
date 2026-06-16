@@ -3,14 +3,14 @@
 
 [package]
 name = "fabric"
-version = "1.4.452"
+version = "1.4.455"
 description = "fabric — open-source AI augmentation framework for applying patterns"
 license = "MIT"
 groups = ["ai", "tools"]
 
 [source]
-url = "https://github.com/danielmiessler/fabric/archive/refs/tags/v1.4.452.tar.gz"
-sha256 = ""
+url = "https://github.com/danielmiessler/fabric/archive/refs/tags/v1.4.455.tar.gz"
+sha256 = "5bd7130d565b9b5a071ad765ab7a8307e8a2bd046b0268422dd0d66a88c4654f"
 
 [depends]
 runtime = ["glibc"]

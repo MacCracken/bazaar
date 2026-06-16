@@ -15,7 +15,7 @@ arch = "x86_64"
 
 [source]
 url = "https://download.gnome.org/sources/network-manager-applet/1.36/network-manager-applet-1.36.0.tar.xz"
-sha256 = ""
+sha256 = "a84704487ea3afe1485c47fb2ab598b8f779f540ae0dcbf0a1c5f85e64a7e253"
 patches = []
 
 [depends]

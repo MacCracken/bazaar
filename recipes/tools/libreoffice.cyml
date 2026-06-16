@@ -9,8 +9,8 @@ license = "MPL-2.0"
 groups = ["tools", "office", "desktop"]
 
 [source]
-url = "https://download.documentfoundation.org/libreoffice/src/26.2.4/libreoffice-26.2.4.1.tar.xz"
-sha256 = ""
+url = "https://download.documentfoundation.org/libreoffice/src/26.2.4/libreoffice-26.2.4.2.tar.xz"
+sha256 = "b9f9655442432998af2cd1034aeee802641aba4d0be6b6ce4fc10bec78ce4b9b"
 
 [depends]
 runtime = ["glibc", "gtk3", "cups", "libxml2", "libxslt", "nss", "icu", "hunspell", "graphite2", "harfbuzz", "poppler"]

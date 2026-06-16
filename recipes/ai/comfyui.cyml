@@ -2,14 +2,14 @@
 
 [package]
 name = "comfyui"
-version = "0.22.3"
+version = "0.25.0"
 description = "ComfyUI — node-based image/video generation workflow engine"
 license = "GPL-3.0"
 groups = ["ai", "image-generation", "web"]
 
 [source]
-url = "https://github.com/comfyanonymous/ComfyUI/archive/refs/tags/v0.22.3.tar.gz"
-sha256 = ""
+url = "https://github.com/comfyanonymous/ComfyUI/archive/refs/tags/v0.25.0.tar.gz"
+sha256 = "75a2a19a76eac2c47f7b822ebfbc8a217909136ed049777daab2a12cbf37cc9f"
 
 [depends]
 runtime = ["python", "pytorch"]

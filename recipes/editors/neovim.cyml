@@ -3,14 +3,14 @@
 
 [package]
 name = "neovim"
-version = "0.12.2"
+version = "0.12.3"
 description = "Neovim — hyperextensible Vim-based text editor"
 license = "Apache-2.0"
 groups = ["editors"]
 
 [source]
-url = "https://github.com/neovim/neovim/archive/refs/tags/v0.12.2.tar.gz"
-sha256 = ""
+url = "https://github.com/neovim/neovim/archive/refs/tags/v0.12.3.tar.gz"
+sha256 = "36a6c66bfbba5d96fa512110aecddb981148a4d013b5ecd01a42877c49855a41"
 
 [depends]
 runtime = ["glibc", "luajit", "libuv", "msgpack-c", "tree-sitter", "unibilium"]

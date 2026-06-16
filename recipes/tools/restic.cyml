@@ -2,14 +2,14 @@
 
 [package]
 name = "restic"
-version = "0.18.1"
+version = "0.19.0"
 description = "restic — fast, secure, efficient backup program"
 license = "BSD-2-Clause"
 groups = ["tools", "backup"]
 
 [source]
-url = "https://github.com/restic/restic/archive/refs/tags/v0.18.1.tar.gz"
-sha256 = ""
+url = "https://github.com/restic/restic/archive/refs/tags/v0.19.0.tar.gz"
+sha256 = "800779b6c4c2396971c0567b09ccdd435e03155e1a0ec94e8bbf3d98641a8bc2"
 
 [depends]
 runtime = ["glibc"]

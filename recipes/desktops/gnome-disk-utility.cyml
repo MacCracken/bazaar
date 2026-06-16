@@ -15,7 +15,7 @@ arch = "x86_64"
 
 [source]
 url = "https://download.gnome.org/sources/gnome-disk-utility/46/gnome-disk-utility-46.1.tar.xz"
-sha256 = ""
+sha256 = "c24e9439a04d70bcfae349ca134c7005435fe2b6f452114df878bff0b89bbffe"
 patches = []
 
 [depends]

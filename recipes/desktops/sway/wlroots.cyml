@@ -9,7 +9,7 @@ groups = ["desktops", "wayland", "libraries"]
 
 [source]
 url = "https://gitlab.freedesktop.org/wlroots/wlroots/-/releases/0.20.1/downloads/wlroots-0.20.1.tar.gz"
-sha256 = ""
+sha256 = "a8541187baecaa2620938afacde88266cb7efa5928cb09d579d8efb07bc4901b"
 
 [depends]
 runtime = [

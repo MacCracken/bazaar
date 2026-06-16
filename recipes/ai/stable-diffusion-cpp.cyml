@@ -2,14 +2,14 @@
 
 [package]
 name = "stable-diffusion-cpp"
-version = "master-655-29ab511"
+version = "master-709-92a3b73"
 description = "stable-diffusion.cpp — local image generation (SD 1.5, SDXL, Flux) in C/C++"
 license = "MIT"
 groups = ["ai", "image-generation"]
 
 [source]
-url = "https://github.com/leejet/stable-diffusion.cpp/archive/refs/tags/master-655-29ab511.tar.gz"
-sha256 = ""
+url = "https://github.com/leejet/stable-diffusion.cpp/archive/refs/tags/master-709-92a3b73.tar.gz"
+sha256 = "5c14f0304ceafe7b590dc16d00b5f39e9730c7123a1d52e1cb127a6652329838"
 
 [depends]
 runtime = ["glibc"]

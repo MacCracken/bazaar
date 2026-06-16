@@ -2,14 +2,14 @@
 
 [package]
 name = "tailscale"
-version = "1.98.3"
+version = "1.100.0"
 description = "Tailscale — zero-config WireGuard-based mesh VPN"
 license = "BSD-3-Clause"
 groups = ["networking", "vpn"]
 
 [source]
-url = "https://github.com/tailscale/tailscale/archive/refs/tags/v1.98.3.tar.gz"
-sha256 = ""
+url = "https://github.com/tailscale/tailscale/archive/refs/tags/v1.100.0.tar.gz"
+sha256 = "d9e097d82f08c8557c887ca71962b20f08e27f3b305902ea504bd0e472486b97"
 
 [depends]
 runtime = ["glibc", "iptables"]

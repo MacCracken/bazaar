@@ -9,7 +9,7 @@ groups = ["tools", "development"]
 
 [source]
 url = "https://github.com/XAMPPRocky/tokei/archive/refs/tags/v14.0.0.tar.gz"
-sha256 = ""
+sha256 = "4e561dbb83ef1b46359714fc623fd45eddfb14821ece63a219470500fdd1cd26"
 
 [depends]
 runtime = ["glibc"]

@@ -9,7 +9,7 @@ groups = ["networking", "diagnostics"]
 
 [source]
 url = "https://github.com/traviscross/mtr/archive/refs/tags/v0.96.tar.gz"
-sha256 = ""
+sha256 = "73e6aef3fb6c8b482acb5b5e2b8fa7794045c4f2420276f035ce76c5beae632d"
 
 [depends]
 runtime = ["glibc", "ncurses"]

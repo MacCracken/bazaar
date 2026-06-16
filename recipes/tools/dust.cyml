@@ -9,7 +9,7 @@ groups = ["tools"]
 
 [source]
 url = "https://github.com/bootandy/dust/archive/refs/tags/v1.2.4.tar.gz"
-sha256 = ""
+sha256 = "2f6768534bd01727234e67f1dd3754c9547aa18c715f6ee52094e881ebac50e3"
 
 [depends]
 runtime = ["glibc"]

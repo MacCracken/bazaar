@@ -9,7 +9,7 @@ groups = ["games", "emulation"]
 
 [source]
 url = "https://github.com/libretro/RetroArch/archive/refs/tags/v1.22.2.tar.gz"
-sha256 = ""
+sha256 = "245ef18c8fa8fbd9fbb5eb25cf43e17c6aace2f95c1ed99873cbd794012bb232"
 
 [depends]
 runtime = ["glibc", "mesa", "vulkan-loader", "libdrm", "wayland", "pipewire", "libusb"]

@@ -9,7 +9,7 @@ groups = ["desktops", "wayland"]
 
 [source]
 url = "https://github.com/hyprwm/hypridle/archive/refs/tags/v0.1.7.tar.gz"
-sha256 = ""
+sha256 = "c4ef2e2894fc2082cfdabe7db086b1f246e3f0de571f7f2c6b26d7c0d9a5f8f3"
 
 [depends]
 runtime = ["glibc", "wayland", "hyprlang", "hyprutils", "sdbus-cpp"]
