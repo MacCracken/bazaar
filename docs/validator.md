@@ -45,11 +45,11 @@ One source file, two kinds of deps in `cyrius.cyml`:
 
 ```toml
 [deps]
-stdlib = ["string", "fmt", "alloc", "args", "vec", "str", "io", "syscalls", "fs", "toml", "hashmap"]
+stdlib = ["string", "fmt", "alloc", "args", "vec", "str", "io", "syscalls", "fs", "bayan", "hashmap", "result", "fnptr", "tagged"]
 
 [deps.zugot]
 git    = "https://github.com/MacCracken/zugot.git"
-tag    = "1.0.2"
+tag    = "1.0.5"
 modules = ["dist/zugot.cyr"]
 ```
 
@@ -65,7 +65,7 @@ The program flow:
 
 ### A limitation: flat-pair mode
 
-Cyrius stdlib `lib/toml.cyr` doesn't parse `[section]` headers (only `[[array-of-tables]]`). It flattens all key/value pairs into one unnamed section. The validator works around this by treating the recipe as a flat key/value map. Consequences:
+toml parsing now comes from **bayan** (`lib/bayan.cyr`) — at the 6.2.x pin the cyrius stdlib dropped its own `toml` module and folded it into bayan, which re-exports the legacy `toml_*` names via compat aliases. Unlike the old stdlib parser, bayan parses `[section]` headers, so the validator re-flattens every section's pairs into one namespace (`flatten_pairs()`) and treats the recipe as a flat key/value map. Consequences:
 
 - ✅ Can verify required keys exist anywhere in the file
 - ❌ Can't enforce that `sha256` is inside `[source]` specifically
@@ -121,7 +121,7 @@ The workflow exposes a `workflow_call:` trigger so `release.yml` can gate tagged
 
 - **stdlib `argv(n)` returns a non-null pointer past the last arg when `n == argc()`** (not `0`). The optional-root handling guards on `argc() > 1` before reading `argv(1)`; testing the pointer alone treats the no-arg case as an empty-string root (silently validates nothing). The older `args_init` stack-dangle bug that forced a hand-rolled `/proc/self/cmdline` reader was fixed in 6.0.3 — that workaround has been removed in favor of stdlib `args_init`/`argv`.
 - **stdlib `is_dir()` 32-byte `getdents64` buffer (worked around)** — `is_dir()` reports "not a directory" when a dir's first entry (in filesystem hash order, *not* `.`/`..` first on ext4/btrfs) has a name ≥ 13 chars, because `getdents64` returns `-EINVAL` when the buffer can't hold the first record. This made stdlib `find_files`/`dir_walk` silently skip whole subtrees (`recipes/ai`, `recipes/networking`, `recipes/games`, `recipes/desktops/hyprland` — 26 recipes invisible to the validator *and* CI). The validator now uses its own `collect_cyml()` walk driven by `getdents64` `d_type`, with a large-buffer `dir_ok()` fallback for `DT_UNKNOWN`. Remove when stdlib `is_dir` is fixed upstream (report filed against cyrius).
-- **Cyrius stdlib `toml` parser flattens sections** — the validator can check required keys exist but not enforce section membership. Switch to nous' `cyml_parse` when it lands in stdlib.
+- **bayan's `toml` parser keeps sections separate; the validator re-flattens them** (`flatten_pairs()`) into one namespace — it can check required keys exist but not enforce section membership. Switch to nous' `cyml_parse` when it lands in stdlib.
 - **Filename/name mismatch error doesn't suggest `pkgbase`** — just says the stems don't match. If a contributor hits this legitimately (parallel version), they have to find [ADR-003](adr/003-pkgbase-for-filename-divergence.md) themselves.
 - **Empty `sha256` is a warning, not an error** — intentional drafting grace period. A `--strict` mode that errors on this, toggled on for merge-targeting PRs, is tracked in [audit F7](audit/2026-04-16.md).
 - **Typosquat detection is manual** — Levenshtein-1 checks live with reviewers for now. Tracked in [audit F6](audit/2026-04-16.md).

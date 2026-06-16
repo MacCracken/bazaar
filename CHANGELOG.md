@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [1.0.5] - 2026-06-16
+
+Lockstep release with zugot 1.0.5 — `[deps.zugot].tag` bumped accordingly. Bazaar skips 1.0.3/1.0.4 to re-sync its version with zugot's (the lockstep guard in `release.yml` requires `VERSION == [deps.zugot].tag`). `dist/zugot.cyr` is byte-identical to the 1.0.2 release (hash `93fff308…` unchanged), so the zugot module entry in `cyrius.lock` is unchanged.
+
+### Changed
+
+- **Cyrius toolchain bumped to 6.2.12** in `cyrius.cyml` (was 6.0.3). Validator builds and validates the full 90-recipe corpus with 0 errors.
+- **`toml` dropped from `[deps].stdlib`, replaced by `bayan`.** At the 6.2.x pin the cyrius stdlib no longer ships `lib/toml.cyr` — the TOML/CYML parser was folded into the **bayan** distfile (`lib/bayan.cyr`), which re-exports the legacy `toml_*` names via compat aliases. `result`, `fnptr`, and `tagged` were added to `[deps].stdlib` to satisfy bayan's surface. The `lib/` folder was removed and regenerated from scratch (`cyrius deps`) to pick up the new closure.
+- **`[deps.zugot].tag` bumped to 1.0.5** to track zugot's latest release (lockstep guard in `release.yml` enforces this on tag push).
+- **`cyrius.lock` regenerated** against the 6.2.12 stdlib closure (29 modules — was 21). Reflects the new platform-variant set the 6.2.x stdlib pulls (`*_agnos`, `*_win`) plus `bayan`/`result`/`fnptr`/`tagged`; `toml.cyr` is gone. The zugot dist-module hash is unchanged.
+
+### Fixed
+
+- **Validator now re-flattens TOML sections (`flatten_pairs()`).** The old cyrius-stdlib parser flattened all `[section]` keys into one namespace for free; bayan's parser keeps sections separate, which would have made every `[source]`/`[depends]`/`[build]` key read as "missing" (450 false errors). The validator now merges every section's pairs into a single flat view before its required-key and dep checks, preserving the prior coarse "key exists *somewhere*" semantics.
+
 ## [1.0.2] - 2026-05-27
 
 Lockstep release with zugot 1.0.2 — `[deps.zugot].tag` bumped accordingly. `dist/zugot.cyr` is byte-identical between zugot 1.0.1 and 1.0.2 (hash `61205111…` unchanged), so the zugot module entry in `cyrius.lock` is unchanged.

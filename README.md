@@ -4,7 +4,7 @@
 
 Community recipe overlay for [AGNOS](https://github.com/MacCracken/agnosticos). Like Arch's AUR, but sitting on top of [zugot](https://github.com/MacCracken/zugot) (the official AGNOS recipe set).
 
-**Current release:** [`1.0.2`](./VERSION) — versioned [in lockstep with zugot](docs/adr/006-zugot-as-cyrius-dep.md); each bazaar tag validates against the matching zugot tag.
+**Current release:** [`1.0.5`](./VERSION) — versioned [in lockstep with zugot](docs/adr/006-zugot-as-cyrius-dep.md); each bazaar tag validates against the matching zugot tag.
 
 **Recipes:** 90 across 8 categories, all `.cyml` ([Cyrius](https://github.com/MacCracken/cyrius) markup, TOML-compatible syntax).
 
@@ -51,7 +51,7 @@ ark bazaar submit recipes/editors/neovim.cyml
 # Resolve deps (pulls zugot dist module via [deps.zugot])
 cyrius deps
 
-# Build the validator (requires cyrius 6.0.3+)
+# Build the validator (requires cyrius 6.2.12+)
 cyrius build scripts/validate_recipes.cyr build/bazaar-validate
 
 # Validate all recipes (includes cross-check against zugot ∪ bazaar names)

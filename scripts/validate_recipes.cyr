@@ -3,11 +3,13 @@
 # Walks recipes/ and checks every .cyml for required keys,
 # filename-matches-package-name, and sha256 format.
 #
-# NOTE: The cyrius stdlib `toml` parser currently flattens sections
-# (treats `[package]` as an unknown line and collects all keys in one
-# namespace). Section-level checks are therefore coarse — we verify
-# required keys exist *somewhere* in the recipe. A future pass can
-# switch to nous' `cyml_parse` once it lands in stdlib.
+# NOTE: toml parsing now comes from bayan (lib/bayan.cyr) — at the 6.2.x
+# pin the cyrius stdlib dropped its own `toml` module and folded it into
+# bayan, which re-exports the legacy toml_* names via compat aliases.
+# Unlike the old stdlib parser, bayan keeps `[section]` headers separate,
+# so we re-flatten every section's pairs into one namespace (flatten_pairs)
+# to preserve the validator's coarse "key exists *somewhere*" semantics.
+# A future pass can switch to nous' `cyml_parse` once it lands in stdlib.
 #
 # Build: cyrius build scripts/validate_recipes.cyr build/bazaar-validate
 # Run:   ./build/bazaar-validate   (from repo root)
@@ -256,6 +258,29 @@ fn url_is_https(s) {
     return 1;
 }
 
+# Merge the pairs from every section into one flat vec, reproducing the
+# section-flattening the old cyrius-stdlib toml parser did for free. bayan's
+# parser (which replaced stdlib toml at the 6.2.x pin) keeps sections separate,
+# so reading only section 0 would miss [source]/[depends]/[build] keys. The
+# validator intentionally checks a single flat namespace — see the module note
+# at the top of this file.
+fn flatten_pairs(sections) {
+    var all = vec_new();
+    var si = 0;
+    var slen = vec_len(sections);
+    while (si < slen) {
+        var sp = toml_section_pairs(vec_get(sections, si));
+        var pi = 0;
+        var plen = vec_len(sp);
+        while (pi < plen) {
+            vec_push(all, vec_get(sp, pi));
+            pi = pi + 1;
+        }
+        si = si + 1;
+    }
+    return all;
+}
+
 fn validate_file(path) {
     var sections = toml_parse_file(str_cstr(path));
     if (vec_len(sections) == 0) {
@@ -263,7 +288,7 @@ fn validate_file(path) {
         return 0;
     }
     # Flat-pair mode: collect all pairs from all sections into one view.
-    var pairs = toml_section_pairs(vec_get(sections, 0));
+    var pairs = flatten_pairs(sections);
 
     require_key(pairs, "name", path);
     require_key(pairs, "version", path);

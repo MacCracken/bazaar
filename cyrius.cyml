@@ -11,14 +11,18 @@ description = "Bazaar — community recipe repository for AGNOS"
 license = "GPL-3.0-only"
 repository = "https://github.com/MacCracken/bazaar"
 language = "cyrius"
-cyrius = "6.0.3"
+cyrius = "6.2.12"
 
 [build]
 entry = "scripts/validate_recipes.cyr"
 output = "build/bazaar-validate"
 
 [deps]
-stdlib = ["string", "fmt", "alloc", "args", "vec", "str", "io", "syscalls", "fs", "toml", "hashmap"]
+# toml parsing moved out of the cyrius stdlib into bayan at the 6.2.x pin
+# (lib/toml.cyr no longer ships); the legacy toml_* names are re-exported via
+# bayan's _compat aliases, so validate_recipes.cyr's toml_* calls keep working.
+# bayan's own surface needs result/fnptr/tagged in scope — listed explicitly.
+stdlib = ["string", "fmt", "alloc", "args", "vec", "str", "io", "syscalls", "fs", "bayan", "hashmap", "result", "fnptr", "tagged"]
 
 # Zugot publishes dist/zugot.cyr — a generated index of every package name
 # in the canonical recipe set. Bazaar's validator cross-checks every recipe
@@ -27,5 +31,5 @@ stdlib = ["string", "fmt", "alloc", "args", "vec", "str", "io", "syscalls", "fs"
 [deps.zugot]
 git = "https://github.com/MacCracken/zugot.git"
 path = "../zugot"
-tag = "1.0.2"
+tag = "1.0.5"
 modules = ["dist/zugot.cyr"]
