@@ -11,7 +11,7 @@ description = "Bazaar — community recipe repository for AGNOS"
 license = "GPL-3.0-only"
 repository = "https://github.com/MacCracken/bazaar"
 language = "cyrius"
-cyrius = "6.2.12"
+cyrius = "6.6.2"
 
 [build]
 entry = "scripts/validate_recipes.cyr"
@@ -28,8 +28,12 @@ stdlib = ["string", "fmt", "alloc", "args", "vec", "str", "io", "syscalls", "fs"
 # in the canonical recipe set. Bazaar's validator cross-checks every recipe
 # dep against this at build time so PRs with unresolved deps fail CI.
 # See docs/adr/006-zugot-as-cyrius-dep.md for the trust relationship.
+# NOTE: no `path = "../zugot"` override here. A `path` that resolves makes the
+# `git`/`tag` fields INERT (cbt/deps.cyr: need_clone stays 0 when the path exists),
+# so a local sibling checkout would be vendored in place of the pinned tag — and
+# `cyrius deps` would then rewrite cyrius.lock to the sibling's hash, with no
+# commit pin recorded. Resolve from git+tag only, the same way CI does.
 [deps.zugot]
 git = "https://github.com/MacCracken/zugot.git"
-path = "../zugot"
 tag = "1.0.5"
 modules = ["dist/zugot.cyr"]

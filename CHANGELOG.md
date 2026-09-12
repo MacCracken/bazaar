@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [1.0.6] - 2026-09-11
+
+### Changed
+
+- **Toolchain `6.2.12` → `6.6.2`.** No source change; the value form needed none.
+  Build, tests, and any bench/fuzz/distlib target the repo ships re-verified at the new pin.
+
+
 ## [1.0.5] - 2026-06-16
 
 Lockstep release with zugot 1.0.5 — `[deps.zugot].tag` bumped accordingly. Bazaar skips 1.0.3/1.0.4 to re-sync its version with zugot's (the lockstep guard in `release.yml` requires `VERSION == [deps.zugot].tag`). `dist/zugot.cyr` is byte-identical to the 1.0.2 release (hash `93fff308…` unchanged), so the zugot module entry in `cyrius.lock` is unchanged.
