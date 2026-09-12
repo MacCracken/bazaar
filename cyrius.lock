@@ -1,4 +1,4 @@
-commit	4ca528cdc10fccda918c4fe2db10e92d938a3d90	zugot	https://github.com/MacCracken/zugot.git	1.0.5
+commit	00c69fdbc7802c687b7689aefde41dacbb189dd5	zugot	https://github.com/MacCracken/zugot.git	1.0.6
 3e51b4f19ecc223ec72f48058d1130074a3d7163de611c3fd704bf6a89ab02f4  lib/tagged.cyr
 6c76a1afec2ab1e3a11cc0d308feae34c4be34c5030a059d79c9efaf9e4b5213  lib/syscalls_macos.cyr
 104ed47e84386323165fc91e75ebca36f3fbfe4717bd7756a2ff8f02303b2647  lib/bayan.cyr

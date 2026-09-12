@@ -35,5 +35,5 @@ stdlib = ["string", "fmt", "alloc", "args", "vec", "str", "io", "syscalls", "fs"
 # commit pin recorded. Resolve from git+tag only, the same way CI does.
 [deps.zugot]
 git = "https://github.com/MacCracken/zugot.git"
-tag = "1.0.5"
+tag = "1.0.6"
 modules = ["dist/zugot.cyr"]
